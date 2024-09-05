@@ -15,13 +15,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Utiliser le routeur pour les utilisateurs
-app.use("/blog", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "blog.html"));
-});
 
-app.use("/details", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "details.html"));
-});
+app.get('/blog', (req, res) => {
+  res.render('blog');
+})
 
 app.post("/users", async (req, res) => {
   try {
@@ -39,5 +36,5 @@ app.post("/users", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+  console.log(`Server is running on http://localhost:3000 with path:`);
 });
