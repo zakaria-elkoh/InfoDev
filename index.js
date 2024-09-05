@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
+const { User } = require("./models");
 
 // Définir le répertoire des vues
 app.set("views", path.join(__dirname, "views"));
@@ -20,6 +21,21 @@ app.use("/blog", (req, res) => {
 
 app.use("/details", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "details.html"));
+});
+
+app.post("/users", async (req, res) => {
+  try {
+    const user = await User.create({
+      username: "newuser",
+      email: "newuser@example.com",
+      password: "securepassword",
+    });
+
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
 });
 
 app.listen(3000, () => {
