@@ -1,0 +1,62 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h1 {
+    margin: 0;
+  }
+  
+  /* Main Section Styles */
+  main {
+    padding: 20px;
+  }
+  
+  .article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .article {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .article-title {
+    font-size: 1.5em;
+    margin: 0;
+  }
+  
+  .article-content {
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  
+  .article-author {
+    font-style: italic;
+    color: #555;
+  }
+  
+  /* Footer Styles */
+  footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
