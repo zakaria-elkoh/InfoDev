@@ -1,3 +1,4 @@
+const { body, validationResult } = require('express-validator');
 const { Article, User } = require('../models');
 
 exports.getArticles = async (req, res) => {
