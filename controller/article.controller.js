@@ -21,26 +21,39 @@ exports.getArticles = async (req, res) => {
     }
 };
 
-exports.getDetailsPage = (req, res) => {
+exports.getProfilePage = (req, res) => {
     res.render('layout/layout', {
         title: 'profile',
         currentPage: 'profile',
-        currentView: '../profilePage'
+        currentView: '../profilePage',
+        errors: []
     });
 }
 
-exports.createArticle = async (req, res) => {
-    const { title, content } = req.body;
-    try {
-        const response = await Article.create({
-            title,
-            content,
-            userId: 1
-        });
-        res.redirect('/profile?created=success');
-    } catch (error) {
-        console.error('Error creating article:', error);
-        res.status(500).send('Internal Server Error');
-        res.redirect('/profile?created=fail');
+exports.createArticle = [
+    body('title').notEmpty().withMessage('Title is required'),
+    body('content').notEmpty().withMessage('The Content is required'),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render('layout/layout', {
+                title: 'profile',
+                currentPage: 'profile',
+                currentView: '../profilePage',
+                errors: errors.array(),
+            })
+        }
+        const { title, content } = req.body;
+        try {
+            const response = await Article.create({
+                title,
+                content,
+                userId: 1
+            });
+            res.redirect('/profile?created=success');
+        } catch (error) {
+            console.error('Error creating article:', error);
+            res.status(500).send('Internal Server Error');
+        }
     }
-}
+] 
