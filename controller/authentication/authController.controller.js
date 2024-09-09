@@ -10,3 +10,10 @@ exports.showRegisterForm = (req, res) => {
   });
 };
 
+// show login form
+exports.showLoginForm = (req, res) => {
+  res.render("auth/login", {
+    title: "login",
+    currentPage: "login",
+  });
+};
