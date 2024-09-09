@@ -4,6 +4,10 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const articleRoutes = require('./router/article.router');
 const db = require('./models');
+const session = require('express-session');
+const flash = require('connect-flash');
+const crypto = require('crypto');
+const secret = crypto.randomBytes(64).toString('hex');
 
 // Définir le répertoire des vues
 app.set("views", path.join(__dirname, "views"));
@@ -15,26 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Définir le répertoire public pour les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
 
-// Utiliser le routeur pour les utilisateurs
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// app.get('/blog', (req, res) => {
-//   res.render('blog');
-// })
+app.use(session({
+  secret: secret,
+  resave: false,
+  saveUninitialized: true
+}))
 
-// app.post("/users", async (req, res) => {
-//   try {
-//     const user = await User.create({
-//       username: "newuser",
-//       email: "newuser@example.com",
-//       password: "securepassword",
-//     });
-
-//     res.json(user);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Something went wrong" });
-//   }
-// });
+app.use(flash());
 
 app.use(articleRoutes);
 

@@ -1,5 +1,10 @@
 const { body, validationResult } = require('express-validator');
 const { Article, User } = require('../models');
+const multer = require('multer');
+const path = require('path');
+const { upload } = require('../middleware/article.middlware');
+const { json } = require('body-parser');
+const { Json } = require('sequelize/lib/utils');
 
 exports.getArticles = async (req, res) => {
     try {
@@ -31,23 +36,30 @@ exports.getProfilePage = (req, res) => {
 }
 
 exports.createArticle = [
+    upload,
     body('title').notEmpty().withMessage('Title is required'),
     body('content').notEmpty().withMessage('The Content is required'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render('layout/layout', {
+            return res.render('layout/layout', {
                 title: 'profile',
                 currentPage: 'profile',
                 currentView: '../profilePage',
-                errors: errors.array(),
+                errors: errors.array()[0].msg,
             })
         }
         const { title, content } = req.body;
+
+        let img = null;
+        if(req.file){
+            img = `/uploads/articles/${req.file.filename}`;
+        }
         try {
             const response = await Article.create({
                 title,
                 content,
+                image: img,
                 userId: 1
             });
             res.redirect('/profile?created=success');
