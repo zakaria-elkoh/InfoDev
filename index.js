@@ -6,12 +6,12 @@ const articleRoutes = require('./router/article.router');
 const db = require('./models');
 const session = require('express-session');
 const flash = require('connect-flash');
-const crypto = require('crypto');
-const secret = crypto.randomBytes(64).toString('hex');
+const commentRoutes = require('./models/commentaire');
 
 // Définir le répertoire des vues
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(express.json());
 
 // Analyser les corps des requêtes
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(session({
-  secret: secret,
+  secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true
 }))
@@ -30,9 +30,30 @@ app.use(session({
 app.use(flash());
 
 app.use(articleRoutes);
+app.use(commentRoutes);
 
 db.sequelize.sync().then(() => {
   app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
   });
 })
+
+// Définir le répertoire des vues
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "ejs");
+
+
+// // Analyser les corps des requêtes
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// // Définir le répertoire public pour les fichiers statiques
+// app.use(express.static(path.join(__dirname, "public")));
+
+// app.use(articleRoutes);
+
+
+// db.sequelize.sync().then(() => {
+//   app.listen(3000, () => {
+//     console.log("Server is running on http://localhost:3000");
+//   });
+// });

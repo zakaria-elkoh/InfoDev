@@ -1,10 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const { Article, User } = require('../models');
-const multer = require('multer');
-const path = require('path');
 const { upload } = require('../middleware/article.middlware');
-const { json } = require('body-parser');
-const { Json } = require('sequelize/lib/utils');
 
 exports.getArticles = async (req, res) => {
     try {
@@ -27,11 +23,12 @@ exports.getArticles = async (req, res) => {
 };
 
 exports.getProfilePage = (req, res) => {
+    let error = req.flash('error_response');
     res.render('layout/layout', {
         title: 'profile',
         currentPage: 'profile',
         currentView: '../profilePage',
-        errors: []
+        errors: error.length > 0 ? error[0] : null,
     });
 }
 
@@ -42,12 +39,8 @@ exports.createArticle = [
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.render('layout/layout', {
-                title: 'profile',
-                currentPage: 'profile',
-                currentView: '../profilePage',
-                errors: errors.array()[0].msg,
-            })
+            req.flash('error_response', errors.array()[0].msg);
+            return res.redirect('/profile');
         }
         const { title, content } = req.body;
 
