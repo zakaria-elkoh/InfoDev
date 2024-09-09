@@ -13,7 +13,7 @@ exports.getDetailPage = async (req, res) => {
           include: [
             {
               model: User,
-              as: "user", 
+              as: "user",
             },
           ],
         },
@@ -70,6 +70,68 @@ exports.addComment = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Erreur lors de l'ajout du commentaire",
+    });
+  }
+};
+
+exports.updateComment = async (req, res) => {
+  try {
+    const commentId = req.body.id;
+    const newText = req.body.comment;
+
+    const comment = await Commentaire.findByPk(commentId);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Commentaire non trouvé",
+      });
+    }
+
+    comment.text = newText;
+    await comment.save();
+
+    res.json({
+      success: true,
+      message: "Commentaire mis à jour avec succès !",
+    });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du commentaire :", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la mise à jour du commentaire",
+    });
+  }
+};
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const commentId = req.body.id;
+
+    
+    const comment = await Commentaire.findByPk(commentId);
+
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Commentaire non trouvé",
+      });
+    }
+
+
+    await comment.destroy();
+
+    res.json({
+      success: true,
+      message: "Commentaire supprimé avec succès !",
+    });
+  } catch (error) {
+    console.error("Erreur lors de la suppression du commentaire :", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la suppression du commentaire",
     });
   }
 };

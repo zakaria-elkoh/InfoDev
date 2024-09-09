@@ -63,13 +63,24 @@
                   <p><%= item.user.username %></p>
                 </div>
                 <div class="comment-text"><%= item.text %></div>
-                <button
-                  class="modify-button"
-                  data-toggle="modal"
-                  data-target="#editCommentModal"
-                >
-                  Modifier
-                </button>
+                <div class="">
+                  <button
+                    class="modify-button"
+                    data-toggle="modal"
+                    data-target="#editCommentModal"
+                    id="modify-button"
+                    data-id="<%= item.id %>"
+                  >
+                    Modifier
+                  </button>
+
+                  <button
+                    class="modify-button delete-button"
+                    data-id="<%= item.id %>"
+                  >
+                    suppremer
+                  </button>
+                </div>
               </div>
             </div>
             <% }); %>
@@ -159,7 +170,11 @@
             ></textarea>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="submitCommentubdit"
+            >
               Update Comment
             </button>
           </div>
@@ -322,4 +337,109 @@
   document
     .querySelector("#commentForm")
     .addEventListener("submit", submitComment);
+
+  const modifyComment = document.querySelectorAll(".modify-button");
+  let id;
+
+  modifyComment.forEach((item) => {
+    item.addEventListener("click", () => {
+      id = item.getAttribute("data-id");
+      console.log(id);
+
+      console.log(item);
+    });
+  });
+
+  const submitCommentubdit = document.getElementById("submitCommentubdit");
+
+  submitCommentubdit.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const comment = document.getElementById("editComment").value;
+
+    const data = { id, comment };
+
+    try {
+      const response = await fetch("/updateComment", {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Succès",
+          text: result.message,
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erreur",
+          text: result.message,
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Erreur lors de la mise à jour du commentaire",
+        confirmButtonText: "OK",
+      });
+    }
+  });
+
+  document.querySelectorAll(".delete-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = button.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Êtes-vous sûr ?",
+        text: "Vous ne pourrez pas récupérer ce commentaire !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, supprimer !",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch("/deleteComment", {
+              method: "DELETE",
+              body: JSON.stringify({ id }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              Swal.fire("Supprimé !", result.message, "success").then(() => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire("Erreur !", result.message, "error");
+            }
+          } catch (error) {
+            console.error(error);
+            Swal.fire(
+              "Erreur !",
+              "Erreur lors de la suppression du commentaire",
+              "error"
+            );
+          }
+        }
+      });
+    });
+  });
 </script>
