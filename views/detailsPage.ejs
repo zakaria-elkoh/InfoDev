@@ -1,0 +1,445 @@
+<!--================Blog Area =================-->
+
+<link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+<link rel="stylesheet" href="../assets/css/slicknav.css" />
+<link rel="stylesheet" href="../assets/css/animate.min.css" />
+<link rel="stylesheet" href="../assets/css/magnific-popup.css" />
+<link rel="stylesheet" href="../assets/css/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../assets/css/themify-icons.css" />
+<link rel="stylesheet" href="../assets/css/themify-icons.css" />
+<link rel="stylesheet" href="../assets/css/slick.css" />
+<link rel="stylesheet" href="../assets/css/nice-select.css" />
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/responsive.css" />
+<section class="blog_area single-post-area section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 posts-list">
+        <div class="single-post">
+          <div class="text-left mb-4">
+            <button
+              type="button"
+              class="btn btn-primary add-comment-btn"
+              data-toggle="modal"
+              data-target="#commentModal"
+            >
+              Add Comment
+            </button>
+          </div>
+
+          <div class="feature-img text-center">
+            <img
+              class="img-fluid"
+              src="../assets/img/blog/single_blog_1.png"
+              alt=""
+            />
+          </div>
+
+          <div class="blog_details text-center">
+            <h2><%= article.title %></h2>
+            <ul class="blog-info-link mt-3 mb-4 d-flex justify-content-center">
+              <li>
+                <a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a>
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fa fa-comments"></i> <%= article.comments.length %>
+                  Comments</a
+                >
+              </li>
+            </ul>
+            <p class="excert"><%= article?.content %></p>
+
+            <% article.comments.forEach(function(item) { %>
+            <div class="comment-wrapper">
+              <img
+                src="<%= item.user.image || 'https://www.w3schools.com/w3images/avatar2.png' %>"
+                alt="<%= item.user.username %>"
+                class="user-image"
+              />
+              <div class="comment-info">
+                <div class="user-info">
+                  <p><%= item.user.username %></p>
+                </div>
+                <div class="comment-text"><%= item.text %></div>
+                <div class="">
+                  <button
+                    class="modify-button"
+                    data-toggle="modal"
+                    data-target="#editCommentModal"
+                    id="modify-button"
+                    data-id="<%= item.id %>"
+                  >
+                    Modifier
+                  </button>
+
+                  <button
+                    class="modify-button delete-button"
+                    data-id="<%= item.id %>"
+                  >
+                    suppremer
+                  </button>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div
+  class="modal fade"
+  id="commentModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="commentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="commentModalLabel">Add Your Comment</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="commentForm">
+          <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea
+              name="comment"
+              class="form-control"
+              id="comment"
+              rows="3"
+              placeholder="Write your comment"
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">
+              Submit Comment
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="editCommentModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editCommentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editCommentForm">
+          <input type="hidden" id="editCommentId" />
+          <div class="form-group">
+            <label for="editComment">Comment</label>
+            <textarea
+              name="comment"
+              class="form-control"
+              id="editComment"
+              rows="3"
+              placeholder="Edit your comment"
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="submitCommentubdit"
+            >
+              Update Comment
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/vendor/modernizr-3.5.0.min.js"></script>
+<!-- Jquery, Popper, Bootstrap -->
+<script src="../assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="../assets/js/popper.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<!-- Jquery Mobile Menu -->
+<script src="../assets/js/jquery.slicknav.min.js"></script>
+
+<!-- Jquery Slick , Owl-Carousel Plugins -->
+<script src="../assets/js/owl.carousel.min.js"></script>
+<script src="../assets/js/slick.min.js"></script>
+
+<!-- One Page, Animated-HeadLin -->
+<script src="../assets/js/wow.min.js"></script>
+<script src="../assets/js/animated.headline.js"></script>
+
+<!-- Scrollup, nice-select, sticky -->
+<script src="../assets/js/jquery.scrollUp.min.js"></script>
+<script src="../assets/js/jquery.nice-select.min.js"></script>
+<script src="../assets/js/jquery.sticky.js"></script>
+<script src="../assets/js/jquery.magnific-popup.js"></script>
+
+<!-- contact js -->
+<script src="../assets/js/contact.js"></script>
+<script src="../assets/js/jquery.form.js"></script>
+<script src="../assets/js/jquery.validate.min.js"></script>
+<script src="../assets/js/mail-script.js"></script>
+<script src="../assets/js/jquery.ajaxchimp.min.js"></script>
+
+<!-- Jquery Plugins, main Jquery -->
+<script src="../assets/js/plugins.js"></script>
+<script src="../assets/js/main.js"></script>
+
+<style>
+  .add-comment-btn {
+    font-size: 16px;
+    padding: 6px 12px;
+    margin-bottom: 20px;
+    height: 5vh;
+  }
+  .comment-wrapper {
+    display: flex;
+
+    align-items: flex-start;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fafafa;
+    padding-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .user-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+
+  .comment-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .user-info p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .comment-text {
+    margin-top: 5px;
+    color: #555;
+  }
+
+  .modify-button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .modify-button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  async function submitComment(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const comment = document.getElementById("comment");
+
+    console.log(comment.value);
+    const data = { comment: comment.value };
+
+    try {
+      const response = await fetch("/addCommit", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Succès",
+          text: result.message,
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erreur",
+          text: result.message,
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Erreur lors de l'ajout du commentaire",
+        confirmButtonText: "OK",
+      });
+    }
+  }
+
+  document
+    .querySelector("#commentForm")
+    .addEventListener("submit", submitComment);
+
+  const modifyComment = document.querySelectorAll(".modify-button");
+  let id;
+
+  modifyComment.forEach((item) => {
+    item.addEventListener("click", () => {
+      id = item.getAttribute("data-id");
+      console.log(id);
+
+      console.log(item);
+    });
+  });
+
+  const submitCommentubdit = document.getElementById("submitCommentubdit");
+
+  submitCommentubdit.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const comment = document.getElementById("editComment").value;
+
+    const data = { id, comment };
+
+    try {
+      const response = await fetch("/updateComment", {
+        method: "PUT",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Succès",
+          text: result.message,
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.reload();
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Erreur",
+          text: result.message,
+          confirmButtonText: "OK",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Erreur lors de la mise à jour du commentaire",
+        confirmButtonText: "OK",
+      });
+    }
+  });
+
+  document.querySelectorAll(".delete-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = button.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Êtes-vous sûr ?",
+        text: "Vous ne pourrez pas récupérer ce commentaire !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, supprimer !",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch("/deleteComment", {
+              method: "DELETE",
+              body: JSON.stringify({ id }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              Swal.fire("Supprimé !", result.message, "success").then(() => {
+                window.location.reload();
+              });
+            } else {
+              Swal.fire("Erreur !", result.message, "error");
+            }
+          } catch (error) {
+            console.error(error);
+            Swal.fire(
+              "Erreur !",
+              "Erreur lors de la suppression du commentaire",
+              "error"
+            );
+          }
+        }
+      });
+    });
+  });
+</script>
