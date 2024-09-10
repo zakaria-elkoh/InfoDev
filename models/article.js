@@ -16,16 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  Article.init(
-    {
-      title: DataTypes.STRING,
-      content: DataTypes.TEXT,
-      userId: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "Article",
-    }
-  );
+  Article.init({
+    title: DataTypes.STRING,
+    content: DataTypes.TEXT,
+    userId: DataTypes.INTEGER,
+    image: DataTypes.STRING,
+  }, {
+    sequelize,
+    modelName: 'Article',
+  });
   return Article;
 };

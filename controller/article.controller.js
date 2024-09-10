@@ -24,7 +24,6 @@ exports.getArticles = async (req, res) => {
 
 exports.getProfilePage = (req, res) => {
     let error = req.flash('error_response');
-    console.log(error);
     res.render('layout/layout', {
         title: 'profile',
         currentPage: 'profile',

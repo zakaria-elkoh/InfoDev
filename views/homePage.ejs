@@ -11,14 +11,14 @@
                                     <% if (article.image) { %>
                                         <img src="<%= article.image %>" alt="Article Image" class="card-img rounded">
                                         <% } %>
-                                    <a href="#" class="blog_item_date">
-                                        <h3>15</h3>
-                                        <p>Jan</p>
-                                    </a>
+                                            <a href="#" class="blog_item_date">
+                                                <h3>15</h3>
+                                                <p>Jan</p>
+                                            </a>
                                 </div>
 
                                 <div class="blog_details">
-                                    <a class="d-inline-block" href="">
+                                    <a class="d-inline-block" href="/details/<%= article.id %>">
                                         <h2>
                                             <%= article.title %>
                                         </h2>
