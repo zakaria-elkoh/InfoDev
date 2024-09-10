@@ -4,6 +4,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const articleRoutes = require("./router/article.router");
 const commentRoutes = require("./router/comment.router");
+const session = require('express-session');
+const flash = require('flash');
 const db = require("./models");
 
 // Définir le répertoire des vues
@@ -16,6 +18,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Définir le répertoire public pour les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(session({
+  secret: 'INFO_DEV_APP',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(flash());
 
 app.use(articleRoutes);
 app.use(commentRoutes);

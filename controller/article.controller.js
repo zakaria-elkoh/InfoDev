@@ -1,5 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const { Article, User } = require('../models');
+const { upload } = require('../middleware/article.middlware');
 
 exports.getArticles = async (req, res) => {
     try {
@@ -22,32 +23,37 @@ exports.getArticles = async (req, res) => {
 };
 
 exports.getProfilePage = (req, res) => {
+    let error = req.flash('error_response');
+    console.log(error);
     res.render('layout/layout', {
         title: 'profile',
         currentPage: 'profile',
         currentView: '../profilePage',
-        errors: []
+        errors: error.length > 0 ? error[0] : null,
     });
 }
 
 exports.createArticle = [
+    upload,
     body('title').notEmpty().withMessage('Title is required'),
     body('content').notEmpty().withMessage('The Content is required'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render('layout/layout', {
-                title: 'profile',
-                currentPage: 'profile',
-                currentView: '../profilePage',
-                errors: errors.array(),
-            })
+            req.flash('error_response', errors.array()[0].msg);
+            return res.redirect('/profile');
         }
         const { title, content } = req.body;
+
+        let img = null;
+        if(req.file){
+            img = `/uploads/articles/${req.file.filename}`;
+        }
         try {
             const response = await Article.create({
                 title,
                 content,
+                image: img,
                 userId: 1
             });
             res.redirect('/profile?created=success');
