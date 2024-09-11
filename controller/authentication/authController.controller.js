@@ -135,3 +135,13 @@ exports.loginUser = [
   },
 ];
 
+// logout 
+exports.logoutUser = async (req, res) => {
+  try {
+    req.session.destroy();
+    return res.redirect("/login");
+  } catch (error) {
+    console.error("Erreur lors de la déconnexion de l’utilisateur:", error);
+    res.status(500).send("Erreur serveur");
+  }
+};
