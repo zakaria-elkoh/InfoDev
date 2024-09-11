@@ -58,6 +58,8 @@
                         name="username"
                         id="form3Example1c"
                         class="form-control"
+                        pattern="[a-zA-Z0-9_]{3,20}"
+                        title="Username must be between 3 and 20 characters, and can only contain letters, numbers, and underscores"
                         required
                       />
                       <label class="form-label" for="form3Example1c"
@@ -78,6 +80,8 @@
                         name="email"
                         id="form3Example3c"
                         class="form-control"
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                        title="Invalid email address"
                         required
                       />
                       <label class="form-label" for="form3Example3c"
