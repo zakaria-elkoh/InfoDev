@@ -1,0 +1,165 @@
+<!--
+Fatima Ezzahra!!!
+had l front modifie fih kima bghiti ,ana darto gha bach ntesty requests
+-->
+<style>
+    /* Global Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    /* Profile Section */
+    .profile-header {
+        display: flex;
+        align-items: center;
+        background-color: #3498db;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .profile-header img {
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+    }
+
+    .profile-header .info {
+        flex-grow: 1;
+    }
+
+    .profile-header .info h2 {
+        margin: 0;
+    }
+
+    .profile-header .info p {
+        margin: 5px 0;
+    }
+
+    .profile-header a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .profile-header .edit-profile {
+        background-color: #2ecc71;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+    /* Form Section */
+    .article-form {
+        background-color: white;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .article-form h3 {
+        margin-bottom: 20px;
+    }
+
+    .article-form label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .article-form input,
+    .article-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .article-form button {
+        background-color: #3498db;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .article-form button:hover {
+        background-color: #2980b9;
+    }
+</style>
+
+<div class="container">
+    <!-- Profile Section -->
+    <div class="profile-header">
+        <img src="https://via.placeholder.com/80" alt="Profile Picture">
+        <div class="info">
+            <h2>John Doe</h2>
+            <p><i class="fas fa-envelope"></i> john.doe@example.com</p>
+            <p><i class="fas fa-calendar"></i> Member since: January 2024</p>
+        </div>
+        <a href="#" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+    </div>
+
+    <!-- Article Creation Form -->
+    <div class="article-form">
+        <h3>Create a New Article</h3>
+        <form action="/create-article" method="POST">
+            <label for="title">Article Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter the title">
+
+            <label for="content">Article Content</label>
+            <textarea id="content" name="content" rows="10" placeholder="Write your article here..."></textarea>
+
+            <button type="submit"><i class="fas fa-paper-plane"></i> Submit Article</button>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<% if (errors && errors.length> 0) { %>
+    <script>
+        console.log(errors.length);
+        setTimeout(
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error creating the article.',
+                icon: 'error',
+                confirmButtonText: 'Try Again'
+            }),
+            1000
+        )
+
+    </script>
+    <% } %>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const createdStatus = urlParams.get('created');
+
+            if (createdStatus === 'success') {
+                setTimeout(
+                    Swal.fire({
+                        title: 'Article Created!',
+                        text: 'Your article has been successfully created.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const url = new URL(window.location.href);
+                            url.searchParams.delete('created');
+                            history.pushState({}, document.title, url.href);
+                        }
+                    })
+                    ,
+                    1000
+                )
+            }
+        </script>
