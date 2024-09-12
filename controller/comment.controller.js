@@ -1,6 +1,7 @@
 const { Article, User, Commentaire } = require("../models");
 
 exports.getDetailPage = async (req, res) => {
+
   try {
     const articleId = req.params.id;
     console.log(articleId);
@@ -109,7 +110,7 @@ exports.deleteComment = async (req, res) => {
   try {
     const commentId = req.body.id;
 
-    
+
     const comment = await Commentaire.findByPk(commentId);
 
     if (!comment) {

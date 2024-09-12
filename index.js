@@ -6,7 +6,7 @@ const articleRoutes = require('./router/article.router');
 const db = require('./models');
 const session = require('express-session');
 const flash = require('connect-flash');
-const commentRoutes = require('./models/commentaire');
+const commentRoutes = require('./router/comment.router');
 
 // Définir le répertoire des vues
 app.set("views", path.join(__dirname, "views"));

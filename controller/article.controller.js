@@ -49,7 +49,7 @@ exports.createArticle = [
             img = `/uploads/articles/${req.file.filename}`;
         }
         try {
-            const response = await Article.create({
+            await Article.create({
                 title,
                 content,
                 image: img,
