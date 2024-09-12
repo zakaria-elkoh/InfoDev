@@ -1,5 +1,5 @@
 const { Article, User, Commentaire } = require("../models");
-
+const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
   try {
     const articleId = req.params.id;
@@ -20,12 +20,11 @@ exports.getDetailPage = async (req, res) => {
       ],
     });
 
-    // return res.json(article)
     if (!article) {
       return res.status(404).render("layout/layout", {
         title: "Article non trouvé",
         currentPage: "detail",
-        currentView: "../404",
+        currentView: "../errorPage",
         errors: ["Article non trouvé"],
       });
     }
@@ -42,96 +41,144 @@ exports.getDetailPage = async (req, res) => {
     res.status(500).render("layout/layout", {
       title: "Erreur",
       currentPage: "detail",
-      currentView: "../errorPage", // Chemin vers la vue d'erreur
+      currentView: "../errorPage",
       errors: [
         "Une erreur est survenue lors de la récupération des détails de l'article",
       ],
     });
   }
 };
-exports.addComment = async (req, res) => {
-  console.log("==============");
 
-  console.log(req.body);
+exports.addComment = [
+  body("comment")
+    .notEmpty()
+    .withMessage("Le commentaire ne peut pas être vide.")
+    .isLength({ min: 5 })
+    .withMessage("Le commentaire doit contenir au moins 5 caractères."),
 
-  console.log("==============");
+  async (req, res) => {
+    const errors = validationResult(req);
 
-  try {
-    await Commentaire.create({
-      text: req.body.comment,
-      articleId: 2,
-      userId: 1,
-    });
-
-    res.json({ success: true, message: "Commentaire ajouté avec succès !" });
-  } catch (error) {
-    console.error("Erreur lors de l'ajout du commentaire :", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de l'ajout du commentaire",
-    });
-  }
-};
-
-exports.updateComment = async (req, res) => {
-  try {
-    const commentId = req.body.id;
-    const newText = req.body.comment;
-
-    const comment = await Commentaire.findByPk(commentId);
-
-    if (!comment) {
-      return res.status(404).json({
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
         success: false,
-        message: "Commentaire non trouvé",
+        errors: errors.array(),
       });
     }
 
-    comment.text = newText;
-    await comment.save();
+    try {
+      await Commentaire.create({
+        text: req.body.comment,
+        articleId: 2,
+        userId: 1,
+      });
 
-    res.json({
-      success: true,
-      message: "Commentaire mis à jour avec succès !",
-    });
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du commentaire :", error);
-
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la mise à jour du commentaire",
-    });
-  }
-};
-
-exports.deleteComment = async (req, res) => {
-  try {
-    const commentId = req.body.id;
-
-    
-    const comment = await Commentaire.findByPk(commentId);
-
-    if (!comment) {
-      return res.status(404).json({
+      res.json({ success: true, message: "Commentaire ajouté avec succès !" });
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire :", error);
+      res.status(500).json({
         success: false,
-        message: "Commentaire non trouvé",
+        message: "Erreur lors de l'ajout du commentaire",
+      });
+    }
+  },
+];
+
+exports.updateComment = [
+  body("id")
+    .notEmpty()
+    .withMessage("L'ID du commentaire est requis.")
+    .isInt()
+    .withMessage("L'ID doit être un entier valide."),
+  body("comment")
+    .notEmpty()
+    .withMessage("Le commentaire ne peut pas être vide.")
+    .isLength({ min: 5 })
+    .withMessage("Le commentaire doit contenir au moins 5 caractères."),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
       });
     }
 
+    try {
+      const commentId = req.body.id;
+      const newText = req.body.comment;
 
-    await comment.destroy();
+      const comment = await Commentaire.findByPk(commentId);
 
-    res.json({
-      success: true,
-      message: "Commentaire supprimé avec succès !",
-    });
-  } catch (error) {
-    console.error("Erreur lors de la suppression du commentaire :", error);
+      if (!comment) {
+        return res.status(404).json({
+          success: false,
+          message: "Commentaire non trouvé",
+        });
+      }
 
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la suppression du commentaire",
-    });
-  }
-};
+      comment.text = newText;
+      await comment.save();
+
+      res.json({
+        success: true,
+        message: "Commentaire mis à jour avec succès !",
+      });
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du commentaire :", error);
+
+      res.status(500).json({
+        success: false,
+        message: "Erreur lors de la mise à jour du commentaire",
+      });
+    }
+  },
+];
+
+exports.deleteComment = [
+  body("id")
+    .notEmpty()
+    .withMessage("L'ID du commentaire est requis.")
+    .isInt()
+    .withMessage("L'ID doit être un entier valide."),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+    }
+
+    try {
+      const commentId = req.body.id;
+
+      const comment = await Commentaire.findByPk(commentId);
+
+      if (!comment) {
+        return res.status(404).json({
+          success: false,
+          message: "Commentaire non trouvé",
+        });
+      }
+
+      await comment.destroy();
+
+      res.json({
+        success: true,
+        message: "Commentaire supprimé avec succès !",
+      });
+    } catch (error) {
+      console.error("Erreur lors de la suppression du commentaire :", error);
+
+      res.status(500).json({
+        success: false,
+        message: "Erreur lors de la suppression du commentaire",
+      });
+    }
+  },
+];
