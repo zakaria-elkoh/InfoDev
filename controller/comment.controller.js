@@ -2,6 +2,7 @@ const { Article, User, Commentaire } = require("../models");
 const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
+
   try {
     const articleId = req.params.id;
     console.log(session.userId);
@@ -225,5 +226,4 @@ exports.deleteComment = [
         message: "Erreur lors de la suppression du commentaire",
       });
     }
-  },
-];
+  }

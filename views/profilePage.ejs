@@ -109,14 +109,19 @@ had l front modifie fih kima bghiti ,ana darto gha bach ntesty requests
         </div>
         <a href="#" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
     </div>
-
     <!-- Article Creation Form -->
     <div class="article-form">
         <h3>Create a New Article</h3>
-        <form action="/create-article" method="POST">
+        <form action="/create-article" method="POST" enctype="multipart/form-data">
             <label for="title">Article Title</label>
             <input type="text" id="title" name="title" placeholder="Enter the title">
 
+            <label for="title">Article Image</label>
+            <input type="file" accept="image/*" id="imageInput" name="articleImage" />
+            <div class="image-preview w-[25%]">
+                <img id="imageOutPut" />
+                <p id="imageName"></p>
+            </div>
             <label for="content">Article Content</label>
             <textarea id="content" name="content" rows="10" placeholder="Write your article here..."></textarea>
 
@@ -125,19 +130,18 @@ had l front modifie fih kima bghiti ,ana darto gha bach ntesty requests
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<% if (errors && errors.length> 0) { %>
+
+<% if (errors !== null) { %>
+
     <script>
-        console.log(errors.length);
-        setTimeout(
+        setTimeout(function () {
             Swal.fire({
                 title: 'Error!',
-                text: 'There was an error creating the article.',
+                text: '<%= errors %>',
                 icon: 'error',
                 confirmButtonText: 'Try Again'
-            }),
-            1000
-        )
-
+            });
+        }, 1000);  // Delay of 1 second before showing alert
     </script>
     <% } %>
         <script>
@@ -161,5 +165,16 @@ had l front modifie fih kima bghiti ,ana darto gha bach ntesty requests
                     ,
                     1000
                 )
+            }
+            let imageInput = document.getElementById("imageInput");
+            let imageOutput = document.getElementById("imageOutPut");
+            let imageName = document.getElementById("imageName");
+            imageInput.onchange = (ev) => {
+                imageOutput.alt = "preview";
+                imageOutput.src = URL.createObjectURL(ev.target.files[0]);
+                imageName.innerHTML = `<b> ${ev.target.files[0].name} </b>`
+                imageOutput.onload = () => {
+                    URL.revokeObjectURL(imageOutput.src);
+                }
             }
         </script>
