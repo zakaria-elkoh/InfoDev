@@ -70,6 +70,7 @@
                     data-target="#editCommentModal"
                     id="modify-button"
                     data-id="<%= item.id %>"
+                    data-text="<%= item.text %>"
                   >
                     Modifier
                   </button>
@@ -315,16 +316,16 @@
           window.location.reload();
         });
       } else {
+        console.log(result);
+
         Swal.fire({
           icon: "error",
           title: "Erreur",
-          text: result.message,
+          text: result.errors[0].msg,
           confirmButtonText: "OK",
         });
       }
     } catch (error) {
-      console.log(error);
-
       Swal.fire({
         icon: "error",
         title: "Erreur",
@@ -344,9 +345,12 @@
   modifyComment.forEach((item) => {
     item.addEventListener("click", () => {
       id = item.getAttribute("data-id");
+      text = item.getAttribute("data-text");
       console.log(id);
 
-      console.log(item);
+      document.getElementById("editComment").value = text;
+
+      console.log(text);
     });
   });
 
@@ -383,7 +387,7 @@
         Swal.fire({
           icon: "error",
           title: "Erreur",
-          text: result.message,
+          text: result.errors[0].msg,
           confirmButtonText: "OK",
         });
       }
