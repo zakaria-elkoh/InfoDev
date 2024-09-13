@@ -32,13 +32,13 @@ exports.registerUser = [
     .withMessage("L’adresse e-mail doit être valide")
     .trim()
     .escape(),
-  
+
   body("password")
     .isLength({ min: 6 })
     .withMessage("Le mot de passe doit contenir au moins 6 caractères")
     .trim()
     .escape(),
-  
+
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -57,7 +57,6 @@ exports.registerUser = [
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         return res.status(400).send("Cet e-mail est déjà utilisé.");
-
       }
 
       // Hacher le mot de passe
@@ -68,7 +67,7 @@ exports.registerUser = [
         username,
         email,
         password: hashedPassword,
-        image: "default.png",
+        image: "/assets/img/avatar2.png",
       });
 
       return res.redirect("/login");
@@ -86,7 +85,7 @@ exports.loginUser = [
     .withMessage("L’adresse e-mail doit être valide")
     .trim()
     .escape(),
-  
+
   body("password")
     .notEmpty()
     .withMessage("Le mot de passe est requis")
@@ -124,8 +123,7 @@ exports.loginUser = [
       }
 
       // Créer une session pour l'utilisateur
-      session.userId = user.id;
-      req.userId = session.userId;
+      req.session.userId = user.id;
 
       return res.redirect("/");
     } catch (error) {
@@ -135,13 +133,13 @@ exports.loginUser = [
   },
 ];
 
-// logout 
-exports.logoutUser = async (req, res) => {
-  try {
-    req.session.destroy();
-    return res.redirect("/login");
-  } catch (error) {
-    console.error("Erreur lors de la déconnexion de l’utilisateur:", error);
-    res.status(500).send("Erreur serveur");
-  }
+// logout
+exports.logoutUser = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+    } else {
+      res.redirect("/login");
+    }
+  });
 };
