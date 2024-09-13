@@ -31,38 +31,40 @@
           <div class="feature-img text-center">
             <img
               class="img-fluid"
-              src="../assets/img/blog/single_blog_1.png"
+              src="<%= data.article.image || '../assets/img/blog/single_blog_1.png' %>"
               alt=""
             />
           </div>
 
           <div class="blog_details text-center">
-            <h2><%= article.title %></h2>
+            <h2><%= data.article.title %></h2>
             <ul class="blog-info-link mt-3 mb-4 d-flex justify-content-center">
               <li>
                 <a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a>
               </li>
               <li>
                 <a href="#"
-                  ><i class="fa fa-comments"></i> <%= article.comments.length %>
-                  Comments</a
+                  ><i class="fa fa-comments"></i> <%=
+                  data.article.comments.length %> Comments</a
                 >
               </li>
             </ul>
-            <p class="excert"><%= article?.content %></p>
+            <p class="excert"><%= data.article?.content %></p>
 
-            <% article.comments.forEach(function(item) { %>
+            <% data.article.comments.forEach(function(item) { %>
             <div class="comment-wrapper">
               <img
-                src="<%= item.user.image || 'https://www.w3schools.com/w3images/avatar2.png' %>"
-                alt="<%= item.user.username %>"
+                src="<%= item.user?.image || 'https://www.w3schools.com/w3images/avatar2.png' %>"
+                alt="<%= item.user?.username %>"
                 class="user-image"
               />
               <div class="comment-info">
                 <div class="user-info">
-                  <p><%= item.user.username %></p>
+                  <p><%= item.user?.username %></p>
                 </div>
                 <div class="comment-text"><%= item.text %></div>
+
+                <% if (data?.userLogin === item.user?.id) { %>
                 <div class="">
                   <button
                     class="modify-button"
@@ -70,6 +72,7 @@
                     data-target="#editCommentModal"
                     id="modify-button"
                     data-id="<%= item.id %>"
+                    data-text="<%= item.text %>"
                   >
                     Modifier
                   </button>
@@ -81,6 +84,7 @@
                     suppremer
                   </button>
                 </div>
+                <% } %>
               </div>
             </div>
             <% }); %>
@@ -125,7 +129,12 @@
             ></textarea>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              id="submit-commente"
+              data-id="<%= data.article.id %>"
+            >
               Submit Comment
             </button>
           </div>
@@ -290,9 +299,11 @@
 
     const form = event.target;
     const comment = document.getElementById("comment");
+    const submitcommente = document.getElementById("submit-commente");
+    id = submitcommente.getAttribute("data-id");
 
     console.log(comment.value);
-    const data = { comment: comment.value };
+    const data = { comment: comment.value, id };
 
     try {
       const response = await fetch("/addCommit", {
@@ -315,16 +326,16 @@
           window.location.reload();
         });
       } else {
+        console.log(result);
+
         Swal.fire({
           icon: "error",
           title: "Erreur",
-          text: result.message,
+          text: result.errors[0].msg,
           confirmButtonText: "OK",
         });
       }
     } catch (error) {
-      console.log(error);
-
       Swal.fire({
         icon: "error",
         title: "Erreur",
@@ -340,13 +351,17 @@
 
   const modifyComment = document.querySelectorAll(".modify-button");
   let id;
+  let text;
 
   modifyComment.forEach((item) => {
     item.addEventListener("click", () => {
       id = item.getAttribute("data-id");
+      text = item.getAttribute("data-text");
       console.log(id);
 
-      console.log(item);
+      document.getElementById("editComment").value = text;
+
+      console.log(text);
     });
   });
 
@@ -383,7 +398,7 @@
         Swal.fire({
           icon: "error",
           title: "Erreur",
-          text: result.message,
+          text: result.errors[0].msg,
           confirmButtonText: "OK",
         });
       }
