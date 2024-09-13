@@ -2,13 +2,10 @@ const { Article, User, Commentaire } = require("../models");
 const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
-
   try {
     const articleId = req.params.id;
-    console.log(session.userId);
 
     const userLogin = session.userId;
-    console.log("userLogin " + userLogin);
 
     const article = await Article.findByPk(articleId, {
       include: [
@@ -24,6 +21,7 @@ exports.getDetailPage = async (req, res) => {
         },
       ],
     });
+
 
     if (!article) {
       return res.status(404).render("layout/layout", {
@@ -226,4 +224,5 @@ exports.deleteComment = [
         message: "Erreur lors de la suppression du commentaire",
       });
     }
-  }
+  },
+];
