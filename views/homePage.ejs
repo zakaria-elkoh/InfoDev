@@ -4,23 +4,92 @@
         <div class="row">
             <div class="col-lg-8 mb-5 mb-lg-0">
                 <div class="blog_left_sidebar">
-                    <% if(articles.length> 0) {%>
+                    <% if(articles.length > 0) { %>
                         <% articles.forEach(article=> { %>
                             <article class="blog_item">
-                                
+
                                 <div class="blog_item_img relative">
                                     <div class="absolute w-[100%] flex justify-end px-3">
+                                        <button data-modal-target="crud-modal<%= article.id %>" data-modal-toggle="crud-modal<%= article.id %>"
+                                                class="rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400 mr-2">
+                                            <i class="fas fa-edit flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
+                                        </button>
                                         <div class="rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400">
-                                            <i class="fas fa-ellipsis-v flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-400"></i>
+                                            <i class="fa fa-trash flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
                                         </div>
                                     </div>
+
                                     <% if (article.image) { %>
                                         <img src="<%= article.image %>" alt="Article Image" class="card-img rounded">
-                                        <% } %>
-                                            <a href="#" class="blog_item_date">
-                                                <h3>15</h3>
-                                                <p>Jan</p>
-                                            </a>
+                                    <% } %>
+                                    <a href="#" class="blog_item_date">
+                                        <h3>15</h3>
+                                        <p>Jan</p>
+                                    </a>
+                                </div>
+
+                                <!-- Main modal -->
+                                <div id="crud-modal<%= article.id %>" tabindex="-1" aria-hidden="true"
+                                     class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+                                    <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg transition-transform transform scale-95 ease-out duration-300">
+                                        <!-- Modal content -->
+                                        <div class="relative p-6">
+                                            <!-- Modal header -->
+                                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-200">
+                                                <h3 class="text-xl font-semibold text-gray-800">
+                                                    Edit Article
+                                                </h3>
+                                                <button type="button"
+                                                        class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                                                        data-modal-toggle="crud-modal<%= article.id %>">
+                                                    <svg class="w-6 h-6" aria-hidden="true"
+                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                         viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                              stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <form class="space-y-6">
+                                                <div>
+                                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                                    <input type="text" name="title" id="title"
+                                                           class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-200 focus:ring-2 shadow-sm transition duration-200 ease-in-out"
+                                                           placeholder="Type article title" required>
+                                                </div>
+                                                <div class="flex items-center space-x-3 p-2 rounded-lg">
+                                                    <label class="text-gray-700 font-medium">Change image?</label>
+                                                    <input type="checkbox" id="img-checkbox" data-input-id="img-input-<%= article.id %>" class="img-checkbox h-5 w-5 text-blue-600 bg-gray-200 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                                </div>
+                                                <div id="img-input-<%= article.id %>" class="hidden opacity-0 transition-opacity duration-300 ease-in-out">
+                                                    <div class="w-[100%]">
+                                                        <label for="image"
+                                                               class="block text-sm font-medium text-gray-700">Image</label>
+                                                        <input type="file" accept="image/*" id="imageInput" name="articleImage" />
+                                                        <div class="image-preview w-[100%]">
+                                                            <img id="imageOutPut" class="w-[25%]" />
+                                                            <p id="imageName"></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="description"
+                                                           class="block text-sm font-medium text-gray-700">Article
+                                                        Description</label>
+                                                    <textarea id="description" rows="4"
+                                                              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-200 focus:ring-2 shadow-sm transition duration-200 ease-in-out"
+                                                              placeholder="Write product description here"></textarea>
+                                                </div>
+                                                <button type="submit"
+                                                        class="w-full px-5 py-2.5 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium focus:ring-4 focus:outline-none focus:ring-blue-300">
+                                                    <i class="fas fa-edit"></i>
+                                                    Edit the Article
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="blog_details">
@@ -38,28 +107,28 @@
                                     </ul>
                                 </div>
                             </article>
-                            <% }) %>
-                                <% } %>
-                                    <nav class="blog-pagination justify-content-center d-flex">
-                                        <ul class="pagination">
-                                            <li class="page-item">
-                                                <a href="#" class="page-link" aria-label="Previous">
-                                                    <i class="ti-angle-left"></i>
-                                                </a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a href="#" class="page-link">1</a>
-                                            </li>
-                                            <li class="page-item active">
-                                                <a href="#" class="page-link">2</a>
-                                            </li>
-                                            <li class="page-item">
-                                                <a href="#" class="page-link" aria-label="Next">
-                                                    <i class="ti-angle-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
+                        <% }) %>
+                    <% } %>
+                    <nav class="blog-pagination justify-content-center d-flex">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a href="#" class="page-link" aria-label="Previous">
+                                    <i class="ti-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a href="#" class="page-link">1</a>
+                            </li>
+                            <li class="page-item active">
+                                <a href="#" class="page-link">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="#" class="page-link" aria-label="Next">
+                                    <i class="ti-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -69,14 +138,15 @@
                             <div class="form-group">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" placeholder='Search Keyword'
-                                        onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                                           onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
                                     <div class="input-group-append">
                                         <button class="btns" type="button"><i class="ti-search"></i></button>
                                     </div>
                                 </div>
                             </div>
                             <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                type="submit">Search</button>
+                                    type="submit">Search
+                            </button>
                         </form>
                     </aside>
 
@@ -235,10 +305,11 @@
                         <form action="#">
                             <div class="form-group">
                                 <input type="email" class="form-control" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
+                                       onblur="this.placeholder = 'Enter email'" placeholder='Enter email' required>
                             </div>
                             <button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn"
-                                type="submit">Subscribe</button>
+                                    type="submit">Subscribe
+                            </button>
                         </form>
                     </aside>
                 </div>
@@ -246,4 +317,42 @@
         </div>
     </div>
 </section>
-<!--================Blog Area =================-->
+<script>
+    let imgCheckBox = document.querySelectorAll(".img-checkbox");
+    let imageInput = document.getElementById("imageInput");
+    let imageOutput = document.getElementById("imageOutPut");
+    let imageName = document.getElementById("imageName");
+
+    for (let i = 0; i < imgCheckBox.length; i++){
+        imgCheckBox[i].addEventListener('change', function (){
+           let imgInput = this.dataset.inputId;
+           let checkboxStatus = this.checked;
+            displayImgInput(imgInput, checkboxStatus);
+        });
+    }
+
+    function displayImgInput(imgInputContainerId, checkboxStatus){
+        let imgContainer = document.getElementById(imgInputContainerId);
+        if (checkboxStatus){
+            imgContainer.classList.remove('hidden');    // Make it visible
+            setTimeout(() => {
+                imgContainer.classList.remove('opacity-0');
+            }, 200);
+        }else{
+            imgContainer.classList.add('opacity-0');    // Fade out
+            setTimeout(() => {
+                imgContainer.classList.add('hidden');
+            }, 300);
+        }
+    }
+
+    imageInput.onchange = (ev) => {
+        imageOutput.alt = "preview";
+        imageOutput.src = URL.createObjectURL(ev.target.files[0]);
+        imageName.innerHTML = `<b> ${ev.target.files[0].name} </b>`
+        imageOutput.onload = () => {
+            URL.revokeObjectURL(imageOutput.src);
+        }
+    }
+
+</script>
