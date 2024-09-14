@@ -7,9 +7,8 @@
                     <% if(articles.length > 0) { %>
                         <% articles.forEach(article=> { %>
                             <article class="blog_item">
-<<<<<<< HEAD
-
                                 <div class="blog_item_img relative">
+                                    <% if (userId === article.userId){ %>
                                     <div class="absolute w-[100%] flex justify-end px-3">
                                         <button data-modal-target="crud-modal<%= article.id %>" data-modal-toggle="crud-modal<%= article.id %>"
                                                 class="rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400 mr-2">
@@ -19,7 +18,7 @@
                                             <i class="fa fa-trash flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
                                         </div>
                                     </div>
-
+                                    <% } %>
                                     <% if (article.image) { %>
                                         <img src="<%= article.image %>" alt="Article Image" class="card-img rounded">
                                     <% } %>
@@ -27,7 +26,7 @@
                                         <h3>15</h3>
                                         <p>Jan</p>
                                     </a>
-
+                                </div>
                                 <!-- Main modal -->
                                 <div id="crud-modal<%= article.id %>" tabindex="-1" aria-hidden="true"
                                      class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center w-full h-full bg-black bg-opacity-50">
