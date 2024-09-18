@@ -5,8 +5,7 @@ exports.getDetailPage = async (req, res) => {
 
   try {
     const articleId = req.params.id;
-
-    const userLogin = session.userId;
+    const userLogin = req.session.userId;
 
     const article = await Article.findByPk(articleId, {
       include: [
@@ -23,19 +22,18 @@ exports.getDetailPage = async (req, res) => {
       ],
     });
 
-
     if (!article) {
-      return res.status(404).render("layout/layout", {
+      return res.status(404).render("404", {
         title: "Article non trouvé",
-        currentPage: "detail",
-        currentView: "../errorPage",
         errors: ["Article non trouvé"],
       });
     }
+
     const data = {
       userLogin,
       article,
     };
+
     res.render("layout/layout", {
       title: "Détails de l'article",
       currentPage: "detail",
@@ -45,10 +43,8 @@ exports.getDetailPage = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).render("layout/layout", {
+    res.status(500).render("404", {
       title: "Erreur",
-      currentPage: "detail",
-      currentView: "../errorPage",
       errors: [
         "Une erreur est survenue lors de la récupération des détails de l'article",
       ],
@@ -87,7 +83,7 @@ exports.addComment = [
       });
     }
 
-    const userId = session.userId;
+    const userId = req.session.userId;
 
     if (!userId) {
       return res.status(401).json({
@@ -139,7 +135,7 @@ exports.updateComment = [
     try {
       const commentId = req.body.id;
       const newText = req.body.comment;
-      const userId = session.userId;
+      const userId = req.session.userId;
 
       const comment = await Commentaire.findByPk(commentId);
 
@@ -187,7 +183,7 @@ exports.deleteComment = async (req, res) => {
 
     try {
       const commentId = req.body.id;
-      const userId = session.userId;
+      const userId = req.session.userId;
       const comment = await Commentaire.findByPk(commentId);
       if (!comment) {
         return res.status(404).json({

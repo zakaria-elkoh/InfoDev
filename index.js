@@ -8,6 +8,7 @@ const articleRoutes = require("./router/article.router");
 const commentRoutes = require("./router/comment.router");
 const registerPath = require("./router/register.router");
 const loginPath = require("./router/login.router");
+const pageNotFoundPath = require("./router/404.router");
 const db = require("./models");
 
 // session middleware
@@ -45,6 +46,8 @@ app.use(articleRoutes);
 app.use(registerPath);
 app.use(loginPath);
 app.use(commentRoutes);
+app.use(pageNotFoundPath);
+
 
 db.sequelize.sync().then(() => {
   app.listen(3000, () => {

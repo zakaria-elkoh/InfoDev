@@ -124,7 +124,6 @@ exports.loginUser = [
 
       // Créer une session pour l'utilisateur
       req.session.userId = user.id;
-
       return res.redirect("/");
     } catch (error) {
       console.error("Erreur lors de la connexion de l’utilisateur:", error);
