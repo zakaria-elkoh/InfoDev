@@ -14,17 +14,19 @@
                                                 class="rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400 mr-2">
                                             <i class="fas fa-edit flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
                                         </button>
-                                        <div class="rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400">
-                                            <i class="fa fa-trash flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
-                                        </div>
+                                        
+                                        <button data-delete-button-id="<%= article.id %>" 
+                                        class="delete-article-button rounded-full w-[35px] h-[35px] bg-gray-100 hover:bg-gray-400 mr-2">
+                                                <i class="fa fa-trash flex items-center justify-center fa-x w-[100%] h-[100%] rounded-full text-gray-500 hover:text-gray-100"></i>
+                                        </button>
                                     </div>
                                     <% } %>
                                     <% if (article.image) { %>
                                         <img src="<%= article.image %>" alt="Article Image" class="card-img rounded">
                                     <% } %>
                                     <a href="#" class="blog_item_date">
-                                        <h3>15</h3>
-                                        <p>Jan</p>
+                                        <h3><%= article.day %></h3>
+                                        <p><%= article.month %></p>
                                     </a>
                                 </div>
                                 <!-- Main modal -->
@@ -51,16 +53,18 @@
                                                 </button>
                                             </div>
                                             <!-- Modal body -->
-                                            <form class="space-y-6">
+                                            <form class="space-y-6" action="/update/article" method="POST" enctype="multipart/form-data">
+                                                <input type="hidden" name="id" value="<%= article.id %>">
                                                 <div>
                                                     <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
                                                     <input type="text" name="title" id="title"
                                                            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-200 focus:ring-2 shadow-sm transition duration-200 ease-in-out"
-                                                           placeholder="Type article title" required>
+                                                           placeholder="Type article title" value="<%= article.title %>">
                                                 </div>
                                                 <div class="flex items-center space-x-3 p-2 rounded-lg">
+                                                    <input type="hidden" name="img-checkbox" value="false">
                                                     <label class="text-gray-700 font-medium">Change image?</label>
-                                                    <input type="checkbox" id="img-checkbox" data-input-id="img-input-<%= article.id %>" class="img-checkbox h-5 w-5 text-blue-600 bg-gray-200 border-gray-300 rounded focus:ring-blue-500 focus:ring-2">
+                                                    <input type="checkbox" id="img-checkbox" data-input-id="img-input-<%= article.id %>" name="img-checkbox" class="img-checkbox h-5 w-5 text-blue-600 bg-gray-200 border-gray-300 rounded focus:ring-blue-500 focus:ring-2" value="true">
                                                 </div>
                                                 <div id="img-input-<%= article.id %>" class="hidden opacity-0 transition-opacity duration-300 ease-in-out">
                                                     <div class="w-[100%]">
@@ -79,7 +83,7 @@
                                                         Description</label>
                                                     <textarea id="description" rows="4"
                                                               class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-200 focus:ring-2 shadow-sm transition duration-200 ease-in-out"
-                                                              placeholder="Write product description here"></textarea>
+                                                              placeholder="Write product description here" name="content"><%= article.content %></textarea>
                                                 </div>
                                                 <button type="submit"
                                                         class="w-full px-5 py-2.5 text-white bg-blue-700 hover:bg-blue-800 rounded-lg font-medium focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -316,11 +320,50 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<% if (errors !== null) { %>
+
+    <script>
+        setTimeout(function () {
+            Swal.fire({
+                title: 'Error!',
+                text: '<%= errors %>',
+                icon: 'error',
+                confirmButtonText: 'Try Again'
+            });
+        }, 1000);  // Delay of 1 second before showing alert
+    </script>
+    <% } %>
+
+
 <script>
     let imgCheckBox = document.querySelectorAll(".img-checkbox");
     let imageInput = document.getElementById("imageInput");
     let imageOutput = document.getElementById("imageOutPut");
     let imageName = document.getElementById("imageName");
+    let deleteArticleButton = document.querySelectorAll('.delete-article-button');
+    const urlParams = new URLSearchParams(window.location.search);
+    const createdStatus = urlParams.get('created');
+
+    if (createdStatus === 'success') {
+        setTimeout(
+            Swal.fire({
+                        title: 'Article Created!',
+                        text: 'Your article has been successfully created.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                }).then((result) => {
+                        if (result.isConfirmed) {
+                            const url = new URL(window.location.href);
+                            url.searchParams.delete('created');
+                            history.pushState({}, document.title, url.href);
+                        }
+                })
+        ,
+        1000
+        )
+    }
 
     for (let i = 0; i < imgCheckBox.length; i++){
         imgCheckBox[i].addEventListener('change', function (){
@@ -353,5 +396,47 @@
             URL.revokeObjectURL(imageOutput.src);
         }
     }
+
+    deleteArticleButton.forEach(button => {
+        button.addEventListener('click', function () {
+            const articleId = button.dataset.deleteButtonId;
+
+            Swal.fire({
+                title: 'Info!',
+                text: 'Delete' + articleId,
+                icon: 'info',
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+                confirmButtonColor: "red"
+            }).then(async (result)=>{
+                if(result.isConfirmed){
+                    try{
+                        const response = await fetch("/delete/article", {
+                            method: 'DELETE',
+                            body: JSON.stringify({ articleId }),
+                            headers: {
+                                "Content-type": "application/json"
+                            }
+                        });
+                        const result = await response.json();
+
+                        if(result.success){
+                            Swal.fire('Success !', result.message, "success").then(() => {
+                                window.location.reload();
+                            })
+                        }else{
+                            Swal.fire('Error !', result.message, "error");
+                        }
+                    }catch(error){
+                        Swal.fire(
+                            "Erreur !",
+                            "Erreur lors de la suppression du commentaire",
+                            "error"
+                        );
+                    }
+                }
+            });
+        })
+    })
 
 </script>
