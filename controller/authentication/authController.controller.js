@@ -1,13 +1,15 @@
 const bcryptjs = require("bcryptjs");
 const { User } = require("../../models");
 const { body, validationResult } = require("express-validator");
-const session = require("express-session");
+const flash = require("express-flash");
+// const session = require("express-session");
 
 // Affiche le formulaire d'inscription
 exports.showRegisterForm = (req, res) => {
   res.render("auth/register", {
     title: "register",
     currentPage: "register",
+    messages: req.flash(),
   });
 };
 
@@ -16,6 +18,7 @@ exports.showLoginForm = (req, res) => {
   res.render("auth/login", {
     title: "login",
     currentPage: "login",
+    messages: req.flash(),
   });
 };
 
@@ -42,12 +45,7 @@ exports.registerUser = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(
-        errors
-          .array()
-          .map((err) => err.msg)
-          .join("<br>")
-      );
+      return res.status(400).redirect('/404');
     }
 
     const { username, email, password } = req.body;
@@ -56,7 +54,8 @@ exports.registerUser = [
       // Vérifier si l'utilisateur
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
-        return res.status(400).send("Cet e-mail est déjà utilisé.");
+        req.flash("error", "Cet e-mail est déjà utilisé.");
+        return res.redirect("/register");
       }
 
       // Hacher le mot de passe
@@ -73,7 +72,7 @@ exports.registerUser = [
       return res.redirect("/login");
     } catch (error) {
       console.error("Erreur lors de l’enregistrement de l’utilisateur:", error);
-      return res.status(500).send("Erreur serveur");
+      return res.status(500).redirect('/404');
     }
   },
 ];
@@ -95,12 +94,7 @@ exports.loginUser = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(
-        errors
-          .array()
-          .map((err) => err.msg)
-          .join("<br>")
-      );
+      return res.status(400).redirect("/404");
     }
 
     const { email, password } = req.body;
@@ -109,17 +103,15 @@ exports.loginUser = [
       const user = await User.findOne({ where: { email } });
 
       if (!user) {
-        return res
-          .status(400)
-          .send("Adresse e-mail ou mot de passe incorrect.");
+        req.flash("error", "Adresse e-mail ou mot de passe incorrect.");
+        return res.redirect("/login");
       }
 
       const isMatch = await bcryptjs.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .send("Adresse e-mail ou mot de passe incorrect.");
+        req.flash("error", "Adresse e-mail ou mot de passe incorrect.");
+        return res.redirect("/login");
       }
 
       // Créer une session pour l'utilisateur
@@ -127,7 +119,7 @@ exports.loginUser = [
       return res.redirect("/");
     } catch (error) {
       console.error("Erreur lors de la connexion de l’utilisateur:", error);
-      res.status(500).send("Erreur serveur");
+      res.status(500).redirect("/404");
     }
   },
 ];
@@ -137,6 +129,7 @@ exports.logoutUser = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
+      res.status(404).redirect("/404");
     } else {
       res.redirect("/login");
     }
