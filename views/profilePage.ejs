@@ -1,165 +1,141 @@
-<!--
-Fatima Ezzahra!!!
-had l front modifie fih kima bghiti ,ana darto gha bach ntesty requests
--->
 <style>
-    /* Global Styles */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
+  .profile-head {
+    transform: translateY(5rem);
+  }
 
-    .container {
-        width: 80%;
-        margin: 0 auto;
-    }
+  .cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 
-    /* Profile Section */
-    .profile-header {
-        display: flex;
-        align-items: center;
-        background-color: #3498db;
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-    }
-
-    .profile-header img {
-        border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        margin-right: 20px;
-    }
-
-    .profile-header .info {
-        flex-grow: 1;
-    }
-
-    .profile-header .info h2 {
-        margin: 0;
-    }
-
-    .profile-header .info p {
-        margin: 5px 0;
-    }
-
-    .profile-header a {
-        color: white;
-        text-decoration: none;
-    }
-
-    .profile-header .edit-profile {
-        background-color: #2ecc71;
-        padding: 10px 15px;
-        border-radius: 5px;
-    }
-
-    /* Form Section */
-    .article-form {
-        background-color: white;
-        padding: 20px;
-        margin-top: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .article-form h3 {
-        margin-bottom: 20px;
-    }
-
-    .article-form label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .article-form input,
-    .article-form textarea {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .article-form button {
-        background-color: #3498db;
-        color: white;
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .article-form button:hover {
-        background-color: #2980b9;
-    }
+  body {
+    background: #654ea3;
+    background: linear-gradient(to right, #e96443, #904e95);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  nav, .search {
+    display: none;
+  }
 </style>
 
-<div class="container">
-    <!-- Profile Section -->
-    <div class="profile-header">
-        <img src="https://via.placeholder.com/80" alt="Profile Picture">
-        <div class="info">
-            <h2>John Doe</h2>
-            <p><i class="fas fa-envelope"></i> john.doe@example.com</p>
-            <p><i class="fas fa-calendar"></i> Member since: January 2024</p>
+<div class="row w-100">
+  <div class="col-md-10 mx-auto">
+    <!-- Profile widget -->
+    <div class="bg-white shadow rounded overflow-hidden">
+      <div class="px-4 pt-0 pb-4 bg-secondary">
+        <div class="media align-items-end profile-head">
+          <div class="profile mr-3">
+            <img
+              src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
+              alt="..."
+              width="130"
+              class="rounded mb-2 img-thumbnail"
+            /><a href="#" class="btn-outline-dark btn-sm btn-block text-center"
+              >Edit profile</a
+            >
+          </div>
+          <div class="media-body mb-5 text-white">
+            <h4 class="mt-0 mb-0">Mark Williams</h4>
+            <p class="small mb-4">
+              <i class="fas fa-map-marker-alt mr-2"></i>New York
+            </p>
+          </div>
         </div>
-        <a href="#" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+      </div>
+      <div class="bg-light p-4 d-flex justify-content-end text-center">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">215</h5>
+            <small class="text-muted">
+              <i class="fas fa-image mr-1"></i>Photos</small
+            >
+          </li>
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">745</h5>
+            <small class="text-muted">
+              <i class="fas fa-user mr-1"></i>Followers</small
+            >
+          </li>
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">340</h5>
+            <small class="text-muted">
+              <i class="fas fa-user mr-1"></i>Following</small
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="px-4 py-3">
+        <h5 class="mb-0">About</h5>
+        <div class="p-4 rounded shadow-sm bg-light">
+          <p class="font-italic mb-0">Web Developer</p>
+          <p class="font-italic mb-0">Lives in New York</p>
+          <p class="font-italic mb-0">Photographer</p>
+        </div>
+      </div>
+      <div class="py-4 px-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h3 class="mb-0">Recent Articles</h5>
+          <!-- <a href="#" class="btn btn-link text-muted">Show all</a> -->
+        </div>
+        <div class="row mt-10 mx-auto" style="max-width: 600px;">
+            <div class="shadow bg-primary pt-0">
+                                            <article class="blog_item"></article>
+                                <div class="blog_item_img">
+                                    <img class="card-img rounded-0" src="assets/img/blog/single_blog_1.png" alt="">
+                                    <a href="#" class="blog_item_date">
+                                        <h3>15</h3>
+                                        <p>Jan</p>
+                                    </a>
+                                </div>
+
+                                <div class="blog_details">
+                                    <a class="d-inline-block" href="">
+                                        <h2>
+                                            the title of the article
+                                        </h2>
+                                    </a>
+                                    <p>
+                                        the description of the article
+                                    </p>
+                                    <ul class="blog-info-link">
+                                        <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
+                                        <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+                                    </ul>
+                                </div>
+                            </article>
+            </div>
+          <div class="mx-auto mb-2">
+            <img
+              src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+              alt=""
+              class="img-fluid rounded shadow-sm"
+            />
+          </div>
+          <div class="mx-auto mb-2">
+            <img
+              src="https://images.unsplash.com/photo-1493571716545-b559a19edd14?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+              alt=""
+              class="img-fluid rounded shadow-sm"
+            />
+          </div>
+          <div class="mx-auto mb-2">
+            <img
+              src="https://images.unsplash.com/photo-1453791052107-5c843da62d97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+              alt=""
+              class="img-fluid rounded shadow-sm"
+            />
+          </div>
+          <div class="mx-auto">
+            <img
+              src="https://images.unsplash.com/photo-1475724017904-b712052c192a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
+              alt=""
+              class="img-fluid rounded shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Article Creation Form -->
-    <div class="article-form">
-        <h3>Create a New Article</h3>
-        <form action="/create-article" method="POST">
-            <label for="title">Article Title</label>
-            <input type="text" id="title" name="title" placeholder="Enter the title">
-
-            <label for="content">Article Content</label>
-            <textarea id="content" name="content" rows="10" placeholder="Write your article here..."></textarea>
-
-            <button type="submit"><i class="fas fa-paper-plane"></i> Submit Article</button>
-        </form>
-    </div>
+  </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<% if (errors && errors.length> 0) { %>
-    <script>
-        console.log(errors.length);
-        setTimeout(
-            Swal.fire({
-                title: 'Error!',
-                text: 'There was an error creating the article.',
-                icon: 'error',
-                confirmButtonText: 'Try Again'
-            }),
-            1000
-        )
-
-    </script>
-    <% } %>
-        <script>
-            const urlParams = new URLSearchParams(window.location.search);
-            const createdStatus = urlParams.get('created');
-
-            if (createdStatus === 'success') {
-                setTimeout(
-                    Swal.fire({
-                        title: 'Article Created!',
-                        text: 'Your article has been successfully created.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const url = new URL(window.location.href);
-                            url.searchParams.delete('created');
-                            history.pushState({}, document.title, url.href);
-                        }
-                    })
-                    ,
-                    1000
-                )
-            }
-        </script>
