@@ -1,9 +1,11 @@
 const { Article, User, Commentaire } = require("../models");
+const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
   try {
     const articleId = req.params.id;
-    console.log(articleId);
+
+    const userLogin = session.userId;
 
     const article = await Article.findByPk(articleId, {
       include: [
@@ -20,6 +22,7 @@ exports.getDetailPage = async (req, res) => {
       ],
     });
 
+
     if (!article) {
       return res.status(404).render("layout/layout", {
         title: "Article non trouvé",
@@ -28,12 +31,15 @@ exports.getDetailPage = async (req, res) => {
         errors: ["Article non trouvé"],
       });
     }
-
+    const data = {
+      userLogin,
+      article,
+    };
     res.render("layout/layout", {
       title: "Détails de l'article",
       currentPage: "detail",
       currentView: "../detailsPage",
-      article: article,
+      data: data,
       errors: [],
     });
   } catch (error) {
@@ -50,6 +56,11 @@ exports.getDetailPage = async (req, res) => {
 };
 
 exports.addComment = [
+  body("id")
+    .notEmpty()
+    .withMessage("L'ID du articles est requis.")
+    .isInt()
+    .withMessage("L'ID doit être un entier valide."),
   body("comment")
     .notEmpty()
     .withMessage("Le commentaire ne peut pas être vide.")
@@ -66,11 +77,29 @@ exports.addComment = [
       });
     }
 
+    const article = await Article.findByPk(req.body.id);
+
+    if (!article) {
+      return res.status(404).json({
+        success: false,
+        message: "article non trouvé",
+      });
+    }
+
+    const userId = session.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Vous devez être connecté pour ajouter un commentaire.",
+      });
+    }
+
     try {
       await Commentaire.create({
         text: req.body.comment,
-        articleId: 2,
-        userId: 1,
+        articleId: req.body.id,
+        userId,
       });
 
       res.json({ success: true, message: "Commentaire ajouté avec succès !" });
@@ -109,6 +138,7 @@ exports.updateComment = [
     try {
       const commentId = req.body.id;
       const newText = req.body.comment;
+      const userId = session.userId;
 
       const comment = await Commentaire.findByPk(commentId);
 
@@ -116,6 +146,13 @@ exports.updateComment = [
         return res.status(404).json({
           success: false,
           message: "Commentaire non trouvé",
+        });
+      }
+
+      if (comment.userId !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: "Vous n'êtes pas autorisé à modifier ce commentaire",
         });
       }
 
@@ -156,13 +193,20 @@ exports.deleteComment = [
 
     try {
       const commentId = req.body.id;
-
+      const userId = session.userId;
       const comment = await Commentaire.findByPk(commentId);
 
       if (!comment) {
         return res.status(404).json({
           success: false,
           message: "Commentaire non trouvé",
+        });
+      }
+
+      if (comment.userId !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: "Vous n'êtes pas autorisé à modifier ce commentaire",
         });
       }
 

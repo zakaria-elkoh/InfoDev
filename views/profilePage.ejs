@@ -43,99 +43,75 @@
             </p>
           </div>
         </div>
-      </div>
-      <div class="bg-light p-4 d-flex justify-content-end text-center">
-        <ul class="list-inline mb-0">
-          <li class="list-inline-item">
-            <h5 class="font-weight-bold mb-0 d-block">215</h5>
-            <small class="text-muted">
-              <i class="fas fa-image mr-1"></i>Photos</small
-            >
-          </li>
-          <li class="list-inline-item">
-            <h5 class="font-weight-bold mb-0 d-block">745</h5>
-            <small class="text-muted">
-              <i class="fas fa-user mr-1"></i>Followers</small
-            >
-          </li>
-          <li class="list-inline-item">
-            <h5 class="font-weight-bold mb-0 d-block">340</h5>
-            <small class="text-muted">
-              <i class="fas fa-user mr-1"></i>Following</small
-            >
-          </li>
-        </ul>
-      </div>
-      <div class="px-4 py-3">
-        <h5 class="mb-0">About</h5>
-        <div class="p-4 rounded shadow-sm bg-light">
-          <p class="font-italic mb-0">Web Developer</p>
-          <p class="font-italic mb-0">Lives in New York</p>
-          <p class="font-italic mb-0">Photographer</p>
-        </div>
-      </div>
-      <div class="py-4 px-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h3 class="mb-0">Recent Articles</h5>
-          <!-- <a href="#" class="btn btn-link text-muted">Show all</a> -->
-        </div>
-        <div class="row mt-10 mx-auto" style="max-width: 600px;">
-            <div class="shadow bg-primary pt-0">
-                                            <article class="blog_item"></article>
-                                <div class="blog_item_img">
-                                    <img class="card-img rounded-0" src="assets/img/blog/single_blog_1.png" alt="">
-                                    <a href="#" class="blog_item_date">
-                                        <h3>15</h3>
-                                        <p>Jan</p>
-                                    </a>
-                                </div>
+        <a href="#" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+    </div>
+    <!-- Article Creation Form -->
+    <div class="article-form">
+        <h3>Create a New Article</h3>
+        <form action="/create-article" method="POST" enctype="multipart/form-data">
+            <label for="title">Article Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter the title">
 
-                                <div class="blog_details">
-                                    <a class="d-inline-block" href="">
-                                        <h2>
-                                            the title of the article
-                                        </h2>
-                                    </a>
-                                    <p>
-                                        the description of the article
-                                    </p>
-                                    <ul class="blog-info-link">
-                                        <li><a href="#"><i class="fa fa-user"></i> Travel, Lifestyle</a></li>
-                                        <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
-                                    </ul>
-                                </div>
-                            </article>
+            <label for="title">Article Image</label>
+            <input type="file" accept="image/*" id="imageInput" name="articleImage" />
+            <div class="image-preview w-[25%]">
+                <img id="imageOutPut" />
+                <p id="imageName"></p>
             </div>
-          <div class="mx-auto mb-2">
-            <img
-              src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-              alt=""
-              class="img-fluid rounded shadow-sm"
-            />
-          </div>
-          <div class="mx-auto mb-2">
-            <img
-              src="https://images.unsplash.com/photo-1493571716545-b559a19edd14?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-              alt=""
-              class="img-fluid rounded shadow-sm"
-            />
-          </div>
-          <div class="mx-auto mb-2">
-            <img
-              src="https://images.unsplash.com/photo-1453791052107-5c843da62d97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-              alt=""
-              class="img-fluid rounded shadow-sm"
-            />
-          </div>
-          <div class="mx-auto">
-            <img
-              src="https://images.unsplash.com/photo-1475724017904-b712052c192a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80"
-              alt=""
-              class="img-fluid rounded shadow-sm"
-            />
-          </div>
-        </div>
-      </div>
+            <label for="content">Article Content</label>
+            <textarea id="content" name="content" rows="10" placeholder="Write your article here..."></textarea>
+
+            <button type="submit"><i class="fas fa-paper-plane"></i> Submit Article</button>
+        </form>
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<% if (errors !== null) { %>
+
+    <script>
+        setTimeout(function () {
+            Swal.fire({
+                title: 'Error!',
+                text: '<%= errors %>',
+                icon: 'error',
+                confirmButtonText: 'Try Again'
+            });
+        }, 1000);  // Delay of 1 second before showing alert
+    </script>
+    <% } %>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const createdStatus = urlParams.get('created');
+
+            if (createdStatus === 'success') {
+                setTimeout(
+                    Swal.fire({
+                        title: 'Article Created!',
+                        text: 'Your article has been successfully created.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const url = new URL(window.location.href);
+                            url.searchParams.delete('created');
+                            history.pushState({}, document.title, url.href);
+                        }
+                    })
+                    ,
+                    1000
+                )
+            }
+            let imageInput = document.getElementById("imageInput");
+            let imageOutput = document.getElementById("imageOutPut");
+            let imageName = document.getElementById("imageName");
+            imageInput.onchange = (ev) => {
+                imageOutput.alt = "preview";
+                imageOutput.src = URL.createObjectURL(ev.target.files[0]);
+                imageName.innerHTML = `<b> ${ev.target.files[0].name} </b>`
+                imageOutput.onload = () => {
+                    URL.revokeObjectURL(imageOutput.src);
+                }
+            }
+        </script>

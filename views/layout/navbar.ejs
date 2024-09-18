@@ -64,10 +64,35 @@
                 </h1>
               </div>
             </div>
+
             <div class="col-xl-3 col-lg-6 col-md-3 d-flex justify-content-end">
-              <a href="/profile">
+              <% if (userId) { %>
+              <!-- Check if userId logged in -->
+              <a href="/profile" class="mr-4">
                 <i class="fas fa-user fa-2x hover:text-gray-400"></i>
               </a>
+              <button
+                class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              >
+                <a href="/logout">Logout</a>
+              </button>
+              <% } else { %>
+              <!-- If not logged in, show login and register buttons -->
+              <a href="/login" class="mr-4">
+                <button
+                  class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Login
+                </button>
+              </a>
+              <a href="/register">
+                <button
+                  class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Register
+                </button>
+              </a>
+              <% } %>
             </div>
           </div>
         </div>
@@ -102,7 +127,7 @@
                 </nav>
               </div>
             </div>
-            <div class="col-xl-2 col-lg-2 col-md-4 search">
+            <div class="col-xl-2 col-lg-2 col-md-4">
               <div class="header-right-btn f-right d-none d-lg-block">
                 <i class="fas fa-search special-tag"></i>
                 <div class="search-box">

@@ -8,9 +8,15 @@ router.get("/login", authController.showLoginForm);
 // show login page
 router.post("/login", authController.loginUser);
 
+router.get("/logout", authController.logoutUser);
+
 // protected route
-// router.get("/dashboard", isAuthenticated, (req, res) => {
-//   res.render("dashboard");
-// });
- 
+// Pass userId to the view
+router.get("/profile", isAuthenticated, (req, res) => {
+  res.render("profile", {
+    title: "Profile Page",
+    userId: req.session.userId,
+  });
+});
+
 module.exports = router;
