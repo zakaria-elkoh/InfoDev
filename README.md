@@ -16,7 +16,6 @@ Ce document décrit l'implémentation de la fonctionnalité CRUD (Créer, Lire, 
   - [Routes](#routes)
   - [Modèles](#modèles)
   - [Vues](#vues)
-- [Instructions pour Lancer le Projet](#instructions-pour-lancer-le-projet)
 
 ## Fonctionnalités
 
@@ -65,5 +64,6 @@ Les modèles représentent la structure des données dans la base de données.
 
 ### Vues (Frontend)
 Les vues sont gérées avec EJS pour afficher les données dynamiquement.
-- **views/detailsPage.ejs** : Affiche les détails d'un commentaire spécifique.
+- **views/detailsPage.ejs** : Affiche les détails d'un article spécifique ainsi que les commentaires associés. Les utilisateurs peuvent voir les commentaires en bas de l'article et, si l'utilisateur est l'auteur d'un commentaire, il a la possibilité de le modifier ou de le supprimer directement depuis cette page.
+
 
