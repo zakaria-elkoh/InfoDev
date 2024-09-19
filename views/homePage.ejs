@@ -70,7 +70,7 @@
                                                     <div class="w-[100%]">
                                                         <label for="image"
                                                                class="block text-sm font-medium text-gray-700">Image</label>
-                                                        <input type="file" accept="image/*" id="imageInput" name="articleImage" />
+                                                        <input type="file" accept="image/*" id="imageInput" name="articleImage" class="imageInput" />
                                                         <div class="image-preview w-[100%]">
                                                             <img id="imageOutPut" class="w-[25%]" />
                                                             <p id="imageName"></p>
@@ -339,7 +339,7 @@
 
 <script>
     let imgCheckBox = document.querySelectorAll(".img-checkbox");
-    let imageInput = document.getElementById("imageInput");
+    let imageInput = document.querySelectorAll(".imageInput");
     let imageOutput = document.getElementById("imageOutPut");
     let imageName = document.getElementById("imageName");
     let deleteArticleButton = document.querySelectorAll('.delete-article-button');
@@ -388,6 +388,11 @@
         }
     }
 
+    imageInput.forEach((imgInput) => {
+        imgInput.addEventListener('change', function(){
+            
+        })
+    })
     imageInput.onchange = (ev) => {
         imageOutput.alt = "preview";
         imageOutput.src = URL.createObjectURL(ev.target.files[0]);

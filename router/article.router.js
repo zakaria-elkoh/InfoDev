@@ -5,8 +5,8 @@ const { isAuthenticated } = require("../middleware/authMiddleware");
 const { upload } = require('../middleware/article.middlware');
 
 router.get('/', articleController.getArticles);
-router.get("/profile", isAuthenticated, articleController.getProfilePage);
-router.post("/create-article", isAuthenticated, articleController.createArticle);
+router.get("/create/article", isAuthenticated, articleController.getCreateArticlePage);
+router.post("/create/article", isAuthenticated, articleController.createArticle);
 router.post("/update/article", isAuthenticated, upload, articleController.updateArticle);
 router.delete("/delete/article", isAuthenticated, articleController.deleteArticle);
 

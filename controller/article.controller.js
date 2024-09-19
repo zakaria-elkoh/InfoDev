@@ -32,12 +32,12 @@ exports.getArticles = async (req, res) => {
     }
 };
 
-exports.getProfilePage = (req, res) => {
+exports.getCreateArticlePage = (req, res) => {
     let error = req.flash('error_response');
     res.render('layout/layout', {
-        title: 'profile',
-        currentPage: 'profile',
-        currentView: '../profilePage',
+        title: 'create articlePage',
+        currentPage: 'createArticlePage',
+        currentView: '../createArticlePage',
         errors: error.length > 0 ? error[0] : null,
     });
 }
@@ -50,7 +50,7 @@ exports.createArticle = [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             req.flash('error_response', errors.array()[0].msg);
-            return res.redirect('/profile');
+            return res.redirect('/create/article');
         }
         const { title, content } = req.body;
 
@@ -65,7 +65,7 @@ exports.createArticle = [
                 image: img,
                 userId: req.session.userId
             });
-            res.redirect('/profile?created=success');
+            res.redirect('/create/article?created=success');
         } catch (error) {
             console.error('Error creating article:', error);
             res.status(500).send('Internal Server Error');
