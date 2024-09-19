@@ -1,15 +1,45 @@
-const { User } = require("../models");
+const { User, Article } = require("../models");
 
 exports.getProfile = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const user = await User.findByPk(userId);
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+    const user = await User.findByPk(req.session.userId);
+
+    const articles = await Article.findAll({
+      where: { userId: req.session.userId },
+    });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    console.log(
+      "useeeeeeeeeeeeeeeeer",
+      user,
+      "articlssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+      articles
+    );
+
+    res.render("profilePage", { user, articles });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.editProfile = async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+    const user = await User.findByPk(req.session.userId);
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    res.render("profile", { user });
+    res.render("editProfilePage", { user });
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
@@ -18,23 +48,33 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const { username, email, password, image } = req.body;
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+    const { firstName, lastName, email, userName } = req.body;
 
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(req.session.userId);
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    user.username = username || user.username;
+    console.log("req.bodyyyyyy", req.body);
+
+    // user.firstName = firstName || user.firstName;
+    // user.lastName = lastName || user.lastName;
     user.email = email || user.email;
-    user.password = password || user.password;
-    user.image = image || user.image;
+    user.username = userName || user.userName;
+    // user.bio = bio || user.bio;
+
+    // Handle profile picture update if implemented
+    // if (req.file) {
+    //   user.profilePicture = req.file.filename;
+    // }
 
     await user.save();
 
-    res.redirect(`/profile/${userId}`);
+    res.redirect("/profile");
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
