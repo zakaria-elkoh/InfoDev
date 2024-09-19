@@ -54,7 +54,9 @@ Les middlewares gèrent l'authentification et la validation des données.
 - **isAuthenticated** : Vérifie si l'utilisateur est connecté avant d'accéder à certaines routes.
 - **isNotAuthenticated** : Vérifie si l'utilisateur n'est pas connecté pour l'accès aux pages de connexion et d'inscription.
 ### Routes
-Les routes d'authentification sont définies dans **login.route.js** et **register.route.js**
+Les routes d'authentification sont définies dans: 
+- login.route.js 
+- register.route.js
 ## Modèles
 Les modèles de données sont définis dans models pour interagir avec la base de données.
 - **User.js** : Représente le modèle d'utilisateur. Contient les définitions des champs (username, email, password) et les validations associées.
@@ -65,7 +67,7 @@ Les vues sont généralement gérées avec un moteur de templates EJS.
   
 # Instructions pour Lancer le Projet
 ## 1.Cloner le dépôt:
-git clone https://github.com/votre-utilisateur/votre-repo.git
+git clone [https://github.com/votre-utilisateur/votre-repo.git](https://github.com/zakaria-elkoh/InfoDev.git)
 ## 2.Installer les dépendances:
 npm install
 ## 3.Configurer la base de données:
