@@ -71,7 +71,7 @@ git clone [https://github.com/votre-utilisateur/votre-repo.git](https://github.c
 ## 2.Installer les dépendances:
 npm install
 ## 3.Configurer la base de données:
-Créez une base de données MySQL.
-Mettez à jour les informations de connexion dans le fichier de configuration.
+- Créez une base de données MySQL.
+- Mettez à jour les informations de connexion dans le fichier de configuration.
 ## 4.Lancer le serveur:
 npm start
