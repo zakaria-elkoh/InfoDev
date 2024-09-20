@@ -32,14 +32,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Définir le répertoire public pour les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
 
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Middleware to pass session data to views
 // Make userId available in all views
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId || null;
   next();
 });
-
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(flash());
 

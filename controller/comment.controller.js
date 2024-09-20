@@ -2,6 +2,7 @@ const { Article, User, Commentaire } = require("../models");
 const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
+
   try {
     const articleId = req.params.id;
     const userLogin = req.session.userId;
@@ -170,14 +171,7 @@ exports.updateComment = [
   },
 ];
 
-exports.deleteComment = [
-  body("id")
-    .notEmpty()
-    .withMessage("L'ID du commentaire est requis.")
-    .isInt()
-    .withMessage("L'ID doit être un entier valide."),
-
-  async (req, res) => {
+exports.deleteComment = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -191,7 +185,6 @@ exports.deleteComment = [
       const commentId = req.body.id;
       const userId = req.session.userId;
       const comment = await Commentaire.findByPk(commentId);
-
       if (!comment) {
         return res.status(404).json({
           success: false,
@@ -220,5 +213,4 @@ exports.deleteComment = [
         message: "Erreur lors de la suppression du commentaire",
       });
     }
-  },
-];
+  }

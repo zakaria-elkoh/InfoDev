@@ -13,7 +13,6 @@
 <!-- Preloader Start-->
 
 <header>
-  <!-- Header Start -->
   <div class="header-area">
     <div class="main-header">
       <div class="header-top black-bg d-none d-md-block">
@@ -57,17 +56,23 @@
             <!-- Logo -->
             <div class="col-xl-3 col-lg-3 col-md-3">
               <div class="logo">
-                <h1
+                <a href="/">
+                  <h1
                   class="text-orange-500 text-4xl font-bold leading-tight font-serif"
                 >
                   Info<span class="text-black">Dev</span>
                 </h1>
+                </a>
               </div>
             </div>
 
             <div class="col-xl-3 col-lg-6 col-md-3 d-flex justify-content-end">
               <% if (userId) { %>
               <!-- Check if userId logged in -->
+              <a href="/create/article" class="mr-4">
+                <i class="fas fa-pencil-alt fa-2x hover:text-gray-400"></i>
+                <i class="fas fa-plus fa-xs" style="position:relative;left:-8px;top:-10px;"></i>
+              </a>
               <a href="/profile" class="mr-4">
                 <i class="fas fa-user fa-2x hover:text-gray-400"></i>
               </a>
@@ -103,7 +108,13 @@
             <div class="col-xl-10 col-lg-10 col-md-12 header-flex">
               <!-- sticky -->
               <div class="sticky-logo">
-                <h1 class="">InfoDev</h1>
+                <a href="/">
+                  <h1
+                  class="text-orange-500 text-4xl font-bold leading-tight font-serif"
+                >
+                  Info<span class="text-black">Dev</span>
+                </h1>
+                </a>
               </div>
               <!-- Main-menu -->
               <div class="main-menu d-none d-md-block">

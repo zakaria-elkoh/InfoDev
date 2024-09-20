@@ -121,7 +121,7 @@
               <% articles.forEach(article => { %>
                 <article class="mb-3 shadow rounded-md overflow-hidden">
                   <div class="blog_item_img">
-                    <img class="card-img rounded-0" src="https://images.unsplash.com/photo-1469594292607-7bd90f8d3ba4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80" alt="article image">
+                    <img class="card-img rounded-0" src="<%= article.image %>" alt="article image">
                     <a href="#" class="blog_item_date">
                       <h3><%= new Date(article.createdAt).getDate() %></h3>
                       <p><%= new Date(article.createdAt).toLocaleString('default', { month: 'short' }) %></p>

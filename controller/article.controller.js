@@ -1,20 +1,62 @@
 const { body, validationResult } = require('express-validator');
-const { Article, User } = require('../models');
+const { Article, User, Commentaire } = require('../models');
 const { upload } = require('../middleware/article.middlware');
+const moment = require('moment');
+const { Sequelize } = require('sequelize');
 
 exports.getArticles = async (req, res) => {
+    const error = req.flash('error_response');
+    const page = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (page - 1) * limit;
     try {
-        const articles = await Article.findAll({
-            include: [{
-                model: User,
-                attributes: ['username']
-            }]
+        const {count, rows: articles} = await Article.findAndCountAll({
+            limit: limit,
+            offset: offset,
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']
+                },
+                {
+                    model: Commentaire,
+                    as: 'comments',
+                    attributes: ['id'],
+                    separate: true
+                }
+            ],
+            attributes: {
+                include: [
+                    // Use a subquery to count comments for each article
+                    [
+                        Sequelize.literal(`(
+                        SELECT COUNT(*)
+                        FROM Commentaires AS comments
+                        WHERE comments.articleId = Article.id
+                        )`),
+                        'commentCount'
+                    ]
+                ]
+            },
+            group: ['Article.id', 'User.id']
         });
+        console.log(articles);
+        
+        const totalPages = Math.ceil(count / limit);
+        const formattedArticles = articles.map(article => {
+            return {
+                ...article.dataValues,
+               day: moment(article.createdAt).format('DD'),    // Day of creation
+               month: moment(article.createdAt).format('MMM')  // Short month format
+            };
+         });
         res.render('layout/layout', {
-            articles,
+            articles: formattedArticles,
             title: 'home',
-            currentPage: 'home',
-            currentView: '../homePage'
+            currentPage: page,
+            currentView: '../homePage',
+            totalPages: totalPages,
+            errors: error.length > 0 ? error[0] : null 
         });
     } catch (error) {
         console.error('Error fetching articles:', error);
@@ -22,12 +64,12 @@ exports.getArticles = async (req, res) => {
     }
 };
 
-exports.getProfilePage = (req, res) => {
+exports.getCreateArticlePage = (req, res) => {
     let error = req.flash('error_response');
     res.render('layout/layout', {
-        title: 'profile',
-        currentPage: 'profile',
-        currentView: '../profilePage',
+        title: 'create articlePage',
+        currentPage: 'createArticlePage',
+        currentView: '../createArticlePage',
         errors: error.length > 0 ? error[0] : null,
     });
 }
@@ -35,12 +77,12 @@ exports.getProfilePage = (req, res) => {
 exports.createArticle = [
     upload,
     body('title').notEmpty().withMessage('Title is required'),
-    body('content').notEmpty().withMessage('The Content is required'),
+    body('content').notEmpty().withMessage('The DEscription is required'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             req.flash('error_response', errors.array()[0].msg);
-            return res.redirect('/profile');
+            return res.redirect('/create/article');
         }
         const { title, content } = req.body;
 
@@ -53,12 +95,82 @@ exports.createArticle = [
                 title,
                 content,
                 image: img,
-                userId: 1
+                userId: req.session.userId
             });
-            res.redirect('/profile?created=success');
+            res.redirect('/create/article?created=success');
         } catch (error) {
             console.error('Error creating article:', error);
             res.status(500).send('Internal Server Error');
         }
     }
 ] 
+
+exports.updateArticle = [
+    body('title').notEmpty().withMessage('Title is required'),
+    body('content').notEmpty().withMessage('Description is required'),
+    async (req, res) => {
+        console.log(req.body);
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            req.flash('error_response', errors.array()[0].msg);
+            return res.redirect('/');
+        }
+        if(req.body['img-checkbox'] === 'true'){
+            upload;
+        }
+
+        let img = null;
+        if(req.file){
+            img = `/uploads/articles/${req.file.filename}`;
+        }
+        
+        
+
+        const {title, content, id} = req.body; 
+        const article = await Article.findByPk(Number(id));
+
+        if(img === null){
+            article.title = title;
+            article.content = content;
+            article.save();
+        }else{
+            article.title = title;
+            article.content = content;
+            article.image = img;
+            article.save();
+        }
+        return res.redirect('/?created=success');
+    }
+]
+
+exports.deleteArticle = async (req, res) => {
+    const articleId = req.body.articleId;
+    const article = await Article.findByPk(articleId);
+        
+    try{
+        if (article.userId !== req.session.userId){
+            req.flash('error_response', "");
+            return res.status(403).json({
+                success: false,
+                message: "You don't have the permission to delete this article"
+            })
+        }
+        if (!article) {
+            return res.status(404).json({
+                success: false,
+                message: "Article not found"
+            })
+        }
+    
+        await article.destroy();
+        return res.json({
+            success: true,
+            message: 'Article Deleted successfully'
+        })
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            message: "Erreur lors de la suppression du commentaire",
+        });
+    }    
+}

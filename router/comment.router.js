@@ -8,5 +8,4 @@ router.post("/addCommit", isAuthenticated, commentController.addComment);
 router.put("/updateComment", isAuthenticated, commentController.updateComment);
 router.delete("/deleteComment", isAuthenticated, commentController.deleteComment
 );
-
 module.exports = router;
