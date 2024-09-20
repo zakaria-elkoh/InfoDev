@@ -29,14 +29,14 @@ exports.getArticles = async (req, res) => {
                 include: [
                     // Use a subquery to count comments for each article
                     [
-                      Sequelize.literal(`(
+                        Sequelize.literal(`(
                         SELECT COUNT(*)
                         FROM Commentaires AS comments
                         WHERE comments.articleId = Article.id
-                      )`),
-                      'commentCount'
+                        )`),
+                        'commentCount'
                     ]
-                  ]
+                ]
             },
             group: ['Article.id', 'User.id']
         });
