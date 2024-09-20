@@ -2,13 +2,14 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
-const session = require('express-session');
-const flash = require('connect-flash');
+const session = require("express-session");
+const flash = require("connect-flash");
 const articleRoutes = require("./router/article.router");
 const commentRoutes = require("./router/comment.router");
 const registerPath = require("./router/register.router");
 const loginPath = require("./router/login.router");
 const pageNotFoundPath = require("./router/404.router");
+const profileRoute = require("./router/profile.router");
 const db = require("./models");
 
 // session middleware
@@ -42,23 +43,22 @@ app.use((req, res, next) => {
 
 app.use(flash());
 
+app.use(profileRoute);
 app.use(articleRoutes);
 app.use(registerPath);
 app.use(loginPath);
 app.use(commentRoutes);
 app.use(pageNotFoundPath);
 
-
 db.sequelize.sync().then(() => {
   app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+    console.log("Server is running on http://localhost:3000");
   });
-})
+});
 
 // Définir le répertoire des vues
 // app.set("views", path.join(__dirname, "views"));
 // app.set("view engine", "ejs");
-
 
 // // Analyser les corps des requêtes
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -67,7 +67,6 @@ db.sequelize.sync().then(() => {
 // app.use(express.static(path.join(__dirname, "public")));
 
 // app.use(articleRoutes);
-
 
 // db.sequelize.sync().then(() => {
 //   app.listen(3000, () => {

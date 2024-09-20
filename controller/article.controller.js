@@ -1,20 +1,51 @@
 const { body, validationResult } = require('express-validator');
-const { Article, User } = require('../models');
+const { Article, User, Commentaire } = require('../models');
 const { upload } = require('../middleware/article.middlware');
 const moment = require('moment');
+const { Sequelize } = require('sequelize');
 
 exports.getArticles = async (req, res) => {
     const error = req.flash('error_response');
+    const page = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (page - 1) * limit;
     try {
-        const articles = await Article.findAll({
-            include: [{
-                model: User,
-                attributes: ['username']
-            }]
+        const {count, rows: articles} = await Article.findAndCountAll({
+            limit: limit,
+            offset: offset,
+            include: [
+                {
+                    model: User,
+                    attributes: ['username']
+                },
+                {
+                    model: Commentaire,
+                    as: 'comments',
+                    attributes: ['id'],
+                    separate: true
+                }
+            ],
+            attributes: {
+                include: [
+                    // Use a subquery to count comments for each article
+                    [
+                      Sequelize.literal(`(
+                        SELECT COUNT(*)
+                        FROM Commentaires AS comments
+                        WHERE comments.articleId = Article.id
+                      )`),
+                      'commentCount'
+                    ]
+                  ]
+            },
+            group: ['Article.id', 'User.id']
         });
+        console.log(articles);
+        
+        const totalPages = Math.ceil(count / limit);
         const formattedArticles = articles.map(article => {
             return {
-               ...article.dataValues,
+                ...article.dataValues,
                day: moment(article.createdAt).format('DD'),    // Day of creation
                month: moment(article.createdAt).format('MMM')  // Short month format
             };
@@ -22,8 +53,9 @@ exports.getArticles = async (req, res) => {
         res.render('layout/layout', {
             articles: formattedArticles,
             title: 'home',
-            currentPage: 'home',
+            currentPage: page,
             currentView: '../homePage',
+            totalPages: totalPages,
             errors: error.length > 0 ? error[0] : null 
         });
     } catch (error) {

@@ -1,0 +1,148 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- svg cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+    <!-- sweet alert CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- CSS here -->
+    
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/slicknav.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/nice-select.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<style>
+  .profile-head {
+    transform: translateY(5rem);
+  }
+
+  .cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  body {
+    background: #654ea3;
+    background: linear-gradient(to right, #e96443, #904e95);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  nav, .search {
+    display: none;
+  }
+</style>
+
+<div class="row w-100">
+  <div class="col-md-10 mx-auto">
+    <!-- Profile widget -->
+    <div class="bg-white shadow rounded overflow-hidden">
+      <div class="px-4 pt-0 pb-4 bg-secondary">
+        <div class="media align-items-end profile-head">
+          <div class="profile mr-3">
+            <img
+              src="https://avatar.iran.liara.run/public/boy?username=<%= user.username %>"
+              alt="..."
+              width="130"
+              class="rounded mb-2 img-thumbnail"
+            /><a href="/profile/edit" class="btn-outline-dark btn-sm btn-block text-center"
+              >Edit profile</a
+            >
+          </div>
+          <div class="media-body mb-5 text-white">
+            <h2 class="mt-0 mb-0 text-2xl font-semibold"><%= user.username %></h4>
+            <p class="small mb-4">
+              <i class="fas fa-map-marker-alt mr-2"></i>New York
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light p-4 d-flex justify-content-end text-center">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">215</h5>
+            <small class="text-muted">
+              <i class="fas fa-image mr-1"></i>Photos</small
+            >
+          </li>
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">745</h5>
+            <small class="text-muted">
+              <i class="fas fa-user mr-1"></i>Followers</small
+            >
+          </li>
+          <li class="list-inline-item">
+            <h5 class="font-weight-bold mb-0 d-block">340</h5>
+            <small class="text-muted">
+              <i class="fas fa-user mr-1"></i>Following</small
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="px-4 py-3">
+        <h5 class="mb-0">About</h5>
+        <div class="p-4 rounded shadow-sm bg-light">
+          <p class="font-italic mb-0">Web Developer</p>
+          <p class="font-italic mb-0">Lives in New York</p>
+          <p class="font-italic mb-0">Photographer</p>
+        </div>
+      </div>
+      <div class="py-4 px-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h3 class="mb-0">Recent Articles</h5>
+          <!-- <a href="#" class="btn btn-link text-muted">Show all</a> -->
+        </div>
+        <div class="row mt-10 mx-auto" style="max-width: 600px;">
+            <div class="">
+              <% articles.forEach(article => { %>
+                <article class="mb-3 shadow rounded-md overflow-hidden">
+                  <div class="blog_item_img">
+                    <img class="card-img rounded-0" src="<%= article.image %>" alt="article image">
+                    <a href="#" class="blog_item_date">
+                      <h3><%= new Date(article.createdAt).getDate() %></h3>
+                      <p><%= new Date(article.createdAt).toLocaleString('default', { month: 'short' }) %></p>
+                    </a>
+                  </div>
+
+                  <div class="blog_details">
+                    <a class="d-inline-block" href="">
+                      <h2><%= article.title %></h2>
+                    </a>
+                    <p><%= article.content %></p>
+                    <ul class="blog-info-link">
+                      <li><a href="#"><i class="fa fa-user"></i> Category</a></li>
+                      <li><a href="#"><i class="fa fa-comments"></i> 03 Comments</a></li>
+                    </ul>
+                  </div>
+                </article>
+              <% }) %>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
