@@ -1,7 +1,6 @@
 const { Article, User, Commentaire } = require("../models");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
-
   try {
     const articleId = req.params.id;
     const userLogin = req.session.userId;
@@ -32,7 +31,6 @@ exports.getDetailPage = async (req, res) => {
       userLogin,
       article,
     };
-
     res.render("layout/layout", {
       title: "Détails de l'article",
       currentPage: "detail",
@@ -171,45 +169,45 @@ exports.updateComment = [
 ];
 
 exports.deleteComment = async (req, res) => {
-    const errors = validationResult(req);
+  const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        errors: errors.array(),
-      });
-    }
-
-    try {
-      const commentId = req.body.id;
-      const userId = req.session.userId;
-      const comment = await Commentaire.findByPk(commentId);
-      if (!comment) {
-        return res.status(404).json({
-          success: false,
-          message: "Commentaire non trouvé",
-        });
-      }
-
-      if (comment.userId !== userId) {
-        return res.status(403).json({
-          success: false,
-          message: "Vous n'êtes pas autorisé à modifier ce commentaire",
-        });
-      }
-
-      await comment.destroy();
-
-      res.json({
-        success: true,
-        message: "Commentaire supprimé avec succès !",
-      });
-    } catch (error) {
-      console.error("Erreur lors de la suppression du commentaire :", error);
-
-      res.status(500).json({
-        success: false,
-        message: "Erreur lors de la suppression du commentaire",
-      });
-    }
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.array(),
+    });
   }
+
+  try {
+    const commentId = req.body.id;
+    const userId = req.session.userId;
+    const comment = await Commentaire.findByPk(commentId);
+    if (!comment) {
+      return res.status(404).json({
+        success: false,
+        message: "Commentaire non trouvé",
+      });
+    }
+
+    if (comment.userId !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Vous n'êtes pas autorisé à modifier ce commentaire",
+      });
+    }
+
+    await comment.destroy();
+
+    res.json({
+      success: true,
+      message: "Commentaire supprimé avec succès !",
+    });
+  } catch (error) {
+    console.error("Erreur lors de la suppression du commentaire :", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors de la suppression du commentaire",
+    });
+  }
+};
