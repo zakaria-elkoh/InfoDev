@@ -1,5 +1,4 @@
 const { Article, User, Commentaire } = require("../models");
-const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 exports.getDetailPage = async (req, res) => {
 
