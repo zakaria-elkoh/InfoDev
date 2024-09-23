@@ -139,3 +139,23 @@ Le projet utilise **HTML** et **CSS** standard, ainsi que **Tailwind CSS** pour 
 - **Multer** est utilisé pour les uploads d'images. Vous pouvez ajuster les limites de taille de fichier et les types de fichiers autorisés dans la configuration du middleware.
 - **express-validator** est utilisé pour valider les données entrantes. Vous pouvez modifier les règles de validation dans les méthodes des contrôleurs.
 
+## Contribuer
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou à soumettre une pull request avec des améliorations ou de nouvelles fonctionnalités.
+
+### Étapes pour Contribuer
+
+1. Forker le dépôt.
+2. Créer une nouvelle branche :
+    ```bash
+    git checkout -b feature/nom-de-votre-fonctionnalité
+    ```
+3. Valider vos modifications :
+    ```bash
+    git commit -m 'Ajout d'une fonctionnalité'
+    ```
+4. Pousser vers la branche :
+    ```bash
+    git push origin feature/nom-de-votre-fonctionnalité
+    ```
+5. Ouvrir une pull request.
