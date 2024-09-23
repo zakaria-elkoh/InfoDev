@@ -1,5 +1,30 @@
 # Infodev
 
+# Table des Matières
+
+- [Infodev](#infodev)
+  - [Description](#description)
+  - [Fonctionnalités](#fonctionnalités)
+    - [1. Authentification](#1-authentification)
+    - [2. Gestion des articles](#2-gestion-des-articles)
+    - [3. Commentaires](#3-commentaires)
+    - [4. Profil utilisateur](#4-profil-utilisateur)
+    - [5. Interface utilisateur](#5-interface-utilisateur)
+  - [Spécifications techniques](#spécifications-techniques)
+    - [Backend](#backend)
+    - [Frontend](#frontend)
+    - [Sécurité](#sécurité)
+  - [Installation](#installation)
+    - [Prérequis](#prérequis)
+    - [Étapes d'installation](#étapes-dinstallation)
+  - [Packages](#packages)
+  - [Base de données](#base-de-données)
+  - [Style](#style)
+  - [Middleware](#middleware)
+  - [Contribuer](#contribuer)
+    - [Étapes pour Contribuer](#étapes-pour-contribuer)
+
+
 ## Description
 Infodev est une application web qui permet aux utilisateurs de s'inscrire, de se connecter, de publier des articles, de commenter des articles, et de gérer leur profil. L'application est développée avec Node.js et Express.js pour le backend, et utilise EJS comme moteur de template pour l'interface utilisateur.
 
